@@ -15,7 +15,8 @@ namespace MednaNetAPIClient
         private string url = "";
         private string port = "";
 
-        
+        private Groups.Groups groups = null;
+        private Installs.Installs intsall = null;
 
         public Client(string apiHostname, string apiPort)
         {
@@ -23,41 +24,20 @@ namespace MednaNetAPIClient
             port = apiPort;
         }
 
-
-        public void start(string installKey)
+        public void SetInstallKey(string installKey)
         {
-            if(installKey == "")
-            {
-                installKey = "supersecret";
+            client.DefaultRequestHeaders.Remove("Authorization");
+            client.DefaultRequestHeaders.Add("Authorization", installKey);
+        }
 
-            }
-
+        public void Connect(string installKey)
+        {
             client.BaseAddress = new Uri("http://" + url + ":" + port + "/");
             client.DefaultRequestHeaders.Accept.Clear();
             
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             client.DefaultRequestHeaders.Add("Authorization", installKey);
         }
-
-        
-
-        
-
-        public async Task<List<Data.Installs>> GetInstalls()
-        {
-            List<Data.Installs> installs = null;
-            HttpResponseMessage response = await client.GetAsync("api/v1/installs");
-
-            if (response.IsSuccessStatusCode)
-            {
-                installs = await response.Content.ReadAsAsync<List<Data.Installs>>();
-            }
-
-            return installs;
-        }
-
-    
-      
 
 
         public async Task<Data.Messages> GetMessages(string groupId)
