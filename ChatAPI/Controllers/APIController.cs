@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 
 
-namespace ChatAPI.Controllers
+namespace MednaNetAPI.Controllers
 {
 
     public class APIController : ApiController

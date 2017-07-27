@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ChatAPI.Models
+namespace MednaNetAPI.Models
 {
     using System;
     using System.Data.Entity;
