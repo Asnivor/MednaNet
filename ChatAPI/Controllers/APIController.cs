@@ -9,7 +9,7 @@ using System.Web.Http;
 namespace ChatAPI.Controllers
 {
 
-    public class ChatController : ApiController
+    public class APIController : ApiController
     {
         //http://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api#restful
 
