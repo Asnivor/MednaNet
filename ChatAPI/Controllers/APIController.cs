@@ -67,6 +67,7 @@ namespace ChatAPI.Controllers
             return Ok(guid);
         }
 
+        //Should only be used as an admin function. Needs to be locked so only called by a specific admin install key
         [Route("api/v1/installs/{installKey}")]
         [HttpGet]
         public IHttpActionResult GetInstall(string installKey)
