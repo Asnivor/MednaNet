@@ -250,7 +250,7 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ChatAPIClient\MednaNetAPIClient.csproj">
+    <ProjectReference Include="..\MednaNetAPIClient\MednaNetAPIClient.csproj">
       <Project>{aa7c3cf6-2c61-4b01-994c-f57634b2a695}</Project>
       <Name>MednaNetAPIClient</Name>
     </ProjectReference>

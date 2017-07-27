@@ -79,7 +79,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ChatAPIClient\MednaNetAPIClient.csproj">
+    <ProjectReference Include="..\MednaNetAPIClient\MednaNetAPIClient.csproj">
       <Project>{aa7c3cf6-2c61-4b01-994c-f57634b2a695}</Project>
       <Name>MednaNetAPIClient</Name>
     </ProjectReference>
