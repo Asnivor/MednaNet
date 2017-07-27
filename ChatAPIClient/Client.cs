@@ -40,19 +40,7 @@ namespace MednaNetAPIClient
         }
 
 
-        public async Task<Data.Messages> GetMessages(string groupId)
-        {
-            HttpResponseMessage response = await client.GetAsync("api/v1/groups/" + groupId.ToString() + "/messages");
-            Data.Messages messages = null;
-
-            if (response.IsSuccessStatusCode)
-            {
-                messages = await response.Content.ReadAsAsync<Data.Messages>();
-            }
-
-            return messages;
-        }
-
+     
 
         public async Task<Uri> CreateMessage(Data.Messages message)
         {

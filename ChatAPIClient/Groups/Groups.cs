@@ -61,5 +61,33 @@ namespace MednaNetAPIClient.Groups
             return response.Headers.Location;
         }
 
+
+        public async Task<IEnumerable<Data.Messages>> GetGroupMessages(int groupId)
+        {
+            HttpResponseMessage response = await client.GetAsync("api/v1/groups/" + groupId.ToString() + "/messages");
+            IEnumerable<Data.Messages> messages = null;
+
+            if (response.IsSuccessStatusCode)
+            {
+                messages = await response.Content.ReadAsAsync<IEnumerable<Data.Messages>>();
+            }
+
+            return messages;
+        }
+
+        public async Task<IEnumerable<Data.Messages>> GetGroupMessagesFrom(int groupId, DateTime from)
+        {
+            string urlSafeDateString = from.ToUniversalTime().ToString("yyyyMMddTHHmmss", System.Globalization.CultureInfo.InvariantCulture);
+
+            HttpResponseMessage response = await client.GetAsync("api/v1/groups/" + groupId.ToString() + "/messages/from/" + urlSafeDateString);
+            IEnumerable<Data.Messages> messages = null;
+
+            if (response.IsSuccessStatusCode)
+            {
+                messages = await response.Content.ReadAsAsync<IEnumerable<Data.Messages>>();
+            }
+
+            return messages;
+        }
     }
 }
