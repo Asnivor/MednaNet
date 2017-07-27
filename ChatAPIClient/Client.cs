@@ -104,6 +104,21 @@ namespace NetplayAPIClient
             return installKey;
         }
 
+
+        public async Task<Messages> GetMessages(string groupId)
+        {
+            HttpResponseMessage response = await client.GetAsync("api/v1/groups/" + groupId.ToString() + "/messages");
+            Messages messages = null;
+
+            if (response.IsSuccessStatusCode)
+            {
+                messages = await response.Content.ReadAsAsync<Messages>();
+            }
+
+            return messages;
+        }
+
+
         public async Task<Uri> CreateMessage(Messages message)
         {
             HttpResponseMessage response = await client.PostAsJsonAsync("api/chat/messages", message);
