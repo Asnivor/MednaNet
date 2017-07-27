@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26430.15
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MednaNetAPI", "ChatAPI\MednaNetAPI.csproj", "{38F2FB23-7ADB-4E0E-B5F1-D639E1C4B867}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MednaNetAPI", "MednaNetAPI\MednaNetAPI.csproj", "{38F2FB23-7ADB-4E0E-B5F1-D639E1C4B867}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chatter", "Chatter\Chatter.csproj", "{D0329E55-86C0-4508-A184-C6BE052BAE80}"
 EndProject
