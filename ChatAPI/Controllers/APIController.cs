@@ -13,26 +13,6 @@ namespace ChatAPI.Controllers
     {
         //http://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api#restful
 
-
-        //[Route("api/chat/groups")]
-        //[HttpGet]
-        // public IHttpActionResult GetGroups(string installKey)
-        // {
-
-        // }
-
-
-        //Install key should be passed through user name field of HTTP Basic Auth
-
-        //api/v1/channels/{channel_id}/messages
-        //api/v1/groups/{group_id}/message
-
-
-        // [Route("api/chat/messages/{from}")]
-        //[HttpGet]
-        // public IHttpActionResult GetMessages
-
-
         [Route("api/v1/installs")]
         [HttpGet]
         public IHttpActionResult GetInstalls()
@@ -61,7 +41,6 @@ namespace ChatAPI.Controllers
             }
 
             return Ok(installs);
-
         }
 
         [Route("api/v1/installs")]
@@ -90,9 +69,6 @@ namespace ChatAPI.Controllers
         [HttpGet]
         public IHttpActionResult GetInstall(string installKey)
         {
-            //IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
-            //string installKey2 = headerValues.FirstOrDefault();
-
             NetplayAPIClient.Installs install = null;
 
             using (Models.MedLaunchChatEntities db = new Models.MedLaunchChatEntities())
@@ -119,11 +95,8 @@ namespace ChatAPI.Controllers
         [HttpGet]
         public IHttpActionResult GetGroups()
         {
-
             IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
             string installKey = headerValues.FirstOrDefault();
-            
-            
 
             List<NetplayAPIClient.Groups> groups = null;
 
@@ -135,8 +108,6 @@ namespace ChatAPI.Controllers
 
                 if (install != null)
                 {
-                    
-
                     groups = (from q in db.group_members
                                 where q.install_id == install.id
                                 select new NetplayAPIClient.Groups()
@@ -146,8 +117,6 @@ namespace ChatAPI.Controllers
                                     groupOwner = q.@group.group_owner,
                                     id = q.id
                                 } ).ToList();
-
-   
                 }
             }
 
@@ -158,7 +127,6 @@ namespace ChatAPI.Controllers
         [HttpPost]
         public IHttpActionResult CreateGroup(NetplayAPIClient.Groups group)
         {
-            //Use installKey to look up the install ID. 
             var APIReturn = new Models.APIReturn();
 
             IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
@@ -223,9 +191,6 @@ namespace ChatAPI.Controllers
             return Ok();
         }
         
-
-
-
         [Route("api/v1/groups/{id}/messages")]
         [HttpPost]
         public IHttpActionResult CreateMessage(int id, NetplayAPIClient.Messages message)
@@ -257,7 +222,6 @@ namespace ChatAPI.Controllers
                         }
                         else
                         {
-
                             var newRecord = new Models.message();
 
                             newRecord.code = message.code;
@@ -277,13 +241,9 @@ namespace ChatAPI.Controllers
                     //Return can't find install
                     APIReturn.returnMessage = "Unable to find install.";
                 }
-
-               
             }
 
-            return Ok(APIReturn);
-
-           
+            return Ok(APIReturn);         
         }
 
         [Route("api/v1/groups/{id}/messages")]
@@ -292,7 +252,6 @@ namespace ChatAPI.Controllers
         {
             IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
             string installKey = headerValues.FirstOrDefault();
-
 
             List<NetplayAPIClient.Messages> messages = null;
 
@@ -304,58 +263,9 @@ namespace ChatAPI.Controllers
 
                 if (install != null)
                 {
-
-                    /*
-                     * var b = from row in a
-        where a.Brow.Any(b => b.name == "Joe") &&
-              a.Brow.Crow.Any(c => c.name == "Kim")
-        select row;
-        
-                     var licenses = context.LicenseUsers
-  .Include(lu => lu.License.Product)
-  .Where(lu => lu.User.Id == 1)
-  .Select(lu => new { lic = lu.License, prod = lu.License.Product } )
-  .AsEnumerable()  // Here we have forced the SQL to include the product too
-  .Select(lu => lu.lic)
-  .ToList(); // Then we select (locally) only the license for convenience 
-             // (so that our collection is of type License)
-             // Since the SQL Query actually loaded the products
-             // the references will be ok
-                     
-                     
-                    db.Schools
-        .Where(x => x.Name.Contains("Some Value"))
-        .Include(x => x.Schools.Where(x => x.MiddleName.Contains("SomeValue")))
-        .ToList();
-                     
-                     */
                     var m = from q in db.groups
                             where q.id == id && q.group_members.Select(b => b.install_id).Contains(install.id)
                             select q.messages;
-
-                    
-
-                   // db.groups
-        //.Where(x => x.id == id && x.group_members.Select(b => b.install_id == install.id)
-       // .
-       // .ToList();
-
-                    //This should return all message for every group user is part of?
-                    //var messages1 = db.messages.Where(x => x.group.group_members.Select(b => b.install_id).Contains(install.id));
-
-                    //trying to get message for a group. Need to make sure that the install is allowed to see messages in group
-
-                    /* messages = (from q in db.messages
-                               where q.
-                               select new NetplayAPIClient.Groups()
-                               {
-                                   groupDescription = q.@group.group_description,
-                                   groupName = q.@group.group_name,
-                                   groupOwner = q.@group.group_owner,
-                                   id = q.id
-                               }).ToList();*/
-
-
                 }
             }
 
