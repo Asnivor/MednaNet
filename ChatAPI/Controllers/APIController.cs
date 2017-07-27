@@ -123,7 +123,27 @@ namespace ChatAPI.Controllers
             return Ok(install);
         }
 
+        [Route("api/v1/installs/checkin")]
+        [HttpGet]
+        public IHttpActionResult CheckinInstall()
+        {
+            IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
+            string installKey = headerValues.FirstOrDefault();
 
+            using (Models.MedLaunchChatEntities db = new Models.MedLaunchChatEntities())
+            {
+                var install = (from q in db.installs
+                              where q.code == installKey
+                              select q).FirstOrDefault();
+
+                install.last_checkin = DateTime.Now;
+
+                db.SaveChanges();
+            }
+
+            return Ok();
+                
+        }
 
         [Route("api/v1/groups")]
         [HttpGet]
