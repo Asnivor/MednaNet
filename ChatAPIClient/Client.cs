@@ -56,31 +56,8 @@ namespace MednaNetAPIClient
             return installs;
         }
 
-        public async Task<Data.Installs> GetInstall(string installKey)
-        {
-            HttpResponseMessage response = await client.GetAsync("api/v1/installs/" + installKey);
-            Data.Installs install = null;
-
-            if (response.IsSuccessStatusCode)
-            {
-                install = await response.Content.ReadAsAsync<Data.Installs>();
-            }
-
-            return install;
-        }
-
-        public async Task<string> CreateInstall()
-        {
-            HttpResponseMessage response = await client.PostAsJsonAsync("api/v1/installs", "");
-            string installKey = "";
-
-            if (response.IsSuccessStatusCode)
-            {
-                installKey = await response.Content.ReadAsAsync<string>();
-            }
-
-            return installKey;
-        }
+    
+      
 
 
         public async Task<Data.Messages> GetMessages(string groupId)

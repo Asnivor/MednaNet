@@ -52,13 +52,13 @@
     <Compile Include="Data\Installs.cs" />
     <Compile Include="Data\Messages.cs" />
     <Compile Include="Groups\Groups.cs" />
+    <Compile Include="Installs\Installs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Installs\" />
     <Folder Include="Messages\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

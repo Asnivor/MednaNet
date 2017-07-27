@@ -94,6 +94,37 @@ namespace ChatAPI.Controllers
             return Ok(install);
         }
 
+        [Route("api/v1/installs")]
+        [HttpGet]
+        public IHttpActionResult GetInstall()
+        {
+            IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
+            string installKey = headerValues.FirstOrDefault();
+
+            MednaNetAPIClient.Data.Installs install = null;
+
+            using (Models.MedLaunchChatEntities db = new Models.MedLaunchChatEntities())
+            {
+                install = (from q in db.installs
+                           where q.code == installKey
+                           select new MednaNetAPIClient.Data.Installs()
+                           {
+                               id = q.id,
+                               banned = q.banned,
+                               code = q.code,
+                               lastCheckin = q.last_checkin,
+                               registeredOn = q.registered_on,
+                               tempBan = q.temp_ban,
+                               tempBanEnd = q.temp_ban_end,
+                               username = q.username
+                           }).FirstOrDefault();
+            }
+
+            return Ok(install);
+        }
+
+
+
         [Route("api/v1/groups")]
         [HttpGet]
         public IHttpActionResult GetGroups()
