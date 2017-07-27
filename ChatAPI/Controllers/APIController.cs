@@ -13,6 +13,8 @@ namespace ChatAPI.Controllers
     {
         //http://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api#restful
 
+        
+
         [Route("api/v1/installs")]
         [HttpGet]
         public IHttpActionResult GetInstalls()

@@ -6,12 +6,11 @@ using System.Web.Mvc;
 
 namespace ChatAPI.Controllers
 {
-    public class HomeController : Controller
+    public class DocsController : Controller
     {
+        // GET: Docs
         public ActionResult Index()
         {
-            ViewBag.Title = "Home Page";
-
             return View();
         }
     }
