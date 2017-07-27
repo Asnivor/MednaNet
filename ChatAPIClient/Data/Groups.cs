@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NetplayAPIClient.Data
+namespace MednaNetAPIClient.Data
 {
     public class Groups
     {

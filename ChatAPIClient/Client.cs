@@ -7,7 +7,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 
-namespace NetplayAPIClient
+namespace MednaNetAPIClient
 {
     public class Client
     {
@@ -39,31 +39,9 @@ namespace NetplayAPIClient
             client.DefaultRequestHeaders.Add("Authorization", installKey);
         }
 
-        public async Task<List<Data.Groups>> GetGroups()
-        {
-            List<Data.Groups> groups = null;
-            HttpResponseMessage response = await client.GetAsync("api/v1/groups");
+        
 
-            if (response.IsSuccessStatusCode)
-            {
-                groups = await response.Content.ReadAsAsync<List<Data.Groups>>();
-            }
-
-            return groups;
-        }
-
-        /*public async Task<List<Messa>> GetGroups(string installKey)
-        {
-            List<Groups> groups = null;
-            HttpResponseMessage response = await client.GetAsync("api/chat/groups?installKey=" + installKey);
-
-            if (response.IsSuccessStatusCode)
-            {
-                groups = await response.Content.ReadAsAsync<List<Groups>>();
-            }
-
-            return groups;
-        }*/
+        
 
         public async Task<List<Data.Installs>> GetInstalls()
         {
@@ -126,11 +104,6 @@ namespace NetplayAPIClient
             return response.Headers.Location;
         }
 
-        public async Task<Uri> CreateGroup(Data.Groups group)
-        {
-            HttpResponseMessage response = await client.PostAsJsonAsync("api/v1/groups", group);
-            response.EnsureSuccessStatusCode();
-            return response.Headers.Location;
-        }
+        
     }
 }

@@ -22,14 +22,14 @@ namespace ChatAPI.Controllers
             IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
             string installKey = headerValues.FirstOrDefault();
 
-            List<NetplayAPIClient.Data.Installs> installs = null;
+            List<MednaNetAPIClient.Data.Installs> installs = null;
 
             if (installKey == "supersecret")
             {
                 using (Models.MedLaunchChatEntities db = new Models.MedLaunchChatEntities())
                 {
                     installs = (from q in db.installs
-                                   select new NetplayAPIClient.Data.Installs()
+                                   select new MednaNetAPIClient.Data.Installs()
                                    {
                                        banned = q.banned,
                                        code = q.code,
@@ -72,13 +72,13 @@ namespace ChatAPI.Controllers
         [HttpGet]
         public IHttpActionResult GetInstall(string installKey)
         {
-            NetplayAPIClient.Data.Installs install = null;
+            MednaNetAPIClient.Data.Installs install = null;
 
             using (Models.MedLaunchChatEntities db = new Models.MedLaunchChatEntities())
             {
                 install = (from q in db.installs
                            where q.code == installKey
-                           select new NetplayAPIClient.Data.Installs()
+                           select new MednaNetAPIClient.Data.Installs()
                            {
                                id = q.id,
                                banned = q.banned,
@@ -101,7 +101,7 @@ namespace ChatAPI.Controllers
             IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
             string installKey = headerValues.FirstOrDefault();
 
-            List<NetplayAPIClient.Data.Groups> groups = null;
+            List<MednaNetAPIClient.Data.Groups> groups = null;
 
             using (Models.MedLaunchChatEntities db = new Models.MedLaunchChatEntities())
             {
@@ -113,7 +113,7 @@ namespace ChatAPI.Controllers
                 {
                     groups = (from q in db.group_members
                                 where q.install_id == install.id
-                                select new NetplayAPIClient.Data.Groups()
+                                select new MednaNetAPIClient.Data.Groups()
                                 {
                                     groupDescription = q.@group.group_description,
                                     groupName = q.@group.group_name,
@@ -128,7 +128,7 @@ namespace ChatAPI.Controllers
 
         [Route("api/v1/groups")]
         [HttpPost]
-        public IHttpActionResult CreateGroup(NetplayAPIClient.Data.Groups group)
+        public IHttpActionResult CreateGroup(MednaNetAPIClient.Data.Groups group)
         {
             var APIReturn = new Models.APIReturn();
 
@@ -147,7 +147,7 @@ namespace ChatAPI.Controllers
                     Models.group newGroup = new Models.group();
                     newGroup.group_description = group.groupDescription;
                     newGroup.group_name = group.groupName;
-                    newGroup.group_owner = group.groupOwner;
+                    newGroup.group_owner = install.id;
 
                     if(newGroup.group_name.Length > 20)
                     {
@@ -196,7 +196,7 @@ namespace ChatAPI.Controllers
         
         [Route("api/v1/groups/{id}/messages")]
         [HttpPost]
-        public IHttpActionResult CreateMessage(int id, NetplayAPIClient.Data.Messages message)
+        public IHttpActionResult CreateMessage(int id, MednaNetAPIClient.Data.Messages message)
         {
             IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
             string installKey = headerValues.FirstOrDefault();
@@ -256,7 +256,7 @@ namespace ChatAPI.Controllers
             IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
             string installKey = headerValues.FirstOrDefault();
 
-            List<NetplayAPIClient.Data.Messages> messages = null;
+            List<MednaNetAPIClient.Data.Messages> messages = null;
 
             using (Models.MedLaunchChatEntities db = new Models.MedLaunchChatEntities())
             {
