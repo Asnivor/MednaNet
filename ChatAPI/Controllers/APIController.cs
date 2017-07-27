@@ -326,6 +326,48 @@ namespace ChatAPI.Controllers
             return Ok(messages.ToList());
         }
 
+        [Route("api/v1/groups/{id}/messages/from/{from}")]
+        [HttpGet]
+        public IHttpActionResult GetMessagesFrom(int id, string from)
+        {
+            IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
+            string installKey = headerValues.FirstOrDefault();
+
+            DateTime fromDate = DateTime.ParseExact(from, "yyyyMMddTHHmmss", System.Globalization.CultureInfo.InvariantCulture).ToLocalTime();
+
+            List<MednaNetAPIClient.Data.Messages> messages = null;
+
+            using (Models.MedLaunchChatEntities db = new Models.MedLaunchChatEntities())
+            {
+                var install = (from q in db.installs
+                               where q.code == installKey
+                               select q).FirstOrDefault();
+
+                if (install != null)
+                {
+
+                    messages =
+                        (from g in db.groups
+                         from m in g.messages
+                         from gm in g.group_members
+                         where m.posted_on > fromDate && gm.install_id == install.id
+                         select new MednaNetAPIClient.Data.Messages()
+                         {
+                             channel = g.id,
+                             code = m.code,
+                             message = m.message1,
+                             name = m.name,
+                             postedOn = m.posted_on
+                         }).ToList();
+
+
+
+                }
+            }
+
+            return Ok(messages);
+        }
+
         
     }
 }

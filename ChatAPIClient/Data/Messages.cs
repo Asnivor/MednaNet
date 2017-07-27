@@ -10,5 +10,8 @@ namespace MednaNetAPIClient.Data
     {
         public string code { get; set; }
         public string message { get; set; }
+        public DateTime postedOn { get; set; }
+        public string name { get; set; }
+        public int channel { get; set; }
     }
 }
