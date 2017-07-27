@@ -7,7 +7,7 @@
     <ProjectGuid>{AA7C3CF6-2C61-4B01-994C-F57634B2A695}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ChatAPIClient</RootNamespace>
+    <RootNamespace>MednaNetAPIClient</RootNamespace>
     <AssemblyName>MednaNetAPIClient</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -48,13 +48,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Client.cs" />
-    <Compile Include="Groups.cs" />
-    <Compile Include="Installs.cs" />
-    <Compile Include="Messages.cs" />
+    <Compile Include="Data\Groups.cs" />
+    <Compile Include="Data\Installs.cs" />
+    <Compile Include="Data\Messages.cs" />
+    <Compile Include="Groups\Groups.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Installs\" />
+    <Folder Include="Messages\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

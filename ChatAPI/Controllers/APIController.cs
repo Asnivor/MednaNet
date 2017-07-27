@@ -22,14 +22,14 @@ namespace ChatAPI.Controllers
             IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
             string installKey = headerValues.FirstOrDefault();
 
-            List<NetplayAPIClient.Installs> installs = null;
+            List<NetplayAPIClient.Data.Installs> installs = null;
 
             if (installKey == "supersecret")
             {
                 using (Models.MedLaunchChatEntities db = new Models.MedLaunchChatEntities())
                 {
                     installs = (from q in db.installs
-                                   select new NetplayAPIClient.Installs()
+                                   select new NetplayAPIClient.Data.Installs()
                                    {
                                        banned = q.banned,
                                        code = q.code,
@@ -72,13 +72,13 @@ namespace ChatAPI.Controllers
         [HttpGet]
         public IHttpActionResult GetInstall(string installKey)
         {
-            NetplayAPIClient.Installs install = null;
+            NetplayAPIClient.Data.Installs install = null;
 
             using (Models.MedLaunchChatEntities db = new Models.MedLaunchChatEntities())
             {
                 install = (from q in db.installs
                            where q.code == installKey
-                           select new NetplayAPIClient.Installs()
+                           select new NetplayAPIClient.Data.Installs()
                            {
                                id = q.id,
                                banned = q.banned,
@@ -101,7 +101,7 @@ namespace ChatAPI.Controllers
             IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
             string installKey = headerValues.FirstOrDefault();
 
-            List<NetplayAPIClient.Groups> groups = null;
+            List<NetplayAPIClient.Data.Groups> groups = null;
 
             using (Models.MedLaunchChatEntities db = new Models.MedLaunchChatEntities())
             {
@@ -113,7 +113,7 @@ namespace ChatAPI.Controllers
                 {
                     groups = (from q in db.group_members
                                 where q.install_id == install.id
-                                select new NetplayAPIClient.Groups()
+                                select new NetplayAPIClient.Data.Groups()
                                 {
                                     groupDescription = q.@group.group_description,
                                     groupName = q.@group.group_name,
@@ -128,7 +128,7 @@ namespace ChatAPI.Controllers
 
         [Route("api/v1/groups")]
         [HttpPost]
-        public IHttpActionResult CreateGroup(NetplayAPIClient.Groups group)
+        public IHttpActionResult CreateGroup(NetplayAPIClient.Data.Groups group)
         {
             var APIReturn = new Models.APIReturn();
 
@@ -196,7 +196,7 @@ namespace ChatAPI.Controllers
         
         [Route("api/v1/groups/{id}/messages")]
         [HttpPost]
-        public IHttpActionResult CreateMessage(int id, NetplayAPIClient.Messages message)
+        public IHttpActionResult CreateMessage(int id, NetplayAPIClient.Data.Messages message)
         {
             IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
             string installKey = headerValues.FirstOrDefault();
@@ -256,7 +256,7 @@ namespace ChatAPI.Controllers
             IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
             string installKey = headerValues.FirstOrDefault();
 
-            List<NetplayAPIClient.Messages> messages = null;
+            List<NetplayAPIClient.Data.Messages> messages = null;
 
             using (Models.MedLaunchChatEntities db = new Models.MedLaunchChatEntities())
             {

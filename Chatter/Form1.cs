@@ -14,7 +14,7 @@ namespace Chatter
     public partial class Form1 : Form
     {
         NetplayAPIClient.Client client = new NetplayAPIClient.Client("localhost", "24215");
-        NetplayAPIClient.Installs currentInstall = null;
+        NetplayAPIClient.Data.Installs currentInstall = null;
 
         public Form1()
         {
@@ -25,7 +25,7 @@ namespace Chatter
 
         private async void button1_Click(object sender, EventArgs e)
         {
-            var message = new NetplayAPIClient.Messages();
+            var message = new NetplayAPIClient.Data.Messages();
             message.code = "test";
             message.message = createMessagebox.Text;
             
@@ -36,7 +36,7 @@ namespace Chatter
 
         private async void button2_Click(object sender, EventArgs e)
         {
-            var group = new NetplayAPIClient.Groups();
+            var group = new NetplayAPIClient.Data.Groups();
             group.groupDescription = "Group description";
             group.groupName = "This is the group Name";
             group.groupOwner = 2;
@@ -60,7 +60,7 @@ namespace Chatter
 
         private async void populateInstallsDropDown(object sender, EventArgs e)
         {
-            List<NetplayAPIClient.Installs> installs =  await client.GetInstalls();
+            List<NetplayAPIClient.Data.Installs> installs =  await client.GetInstalls();
 
             installsDropdown.Items.Clear();
 
@@ -72,7 +72,7 @@ namespace Chatter
 
         private async void populateGroupsDropdown(object sender, EventArgs e)
         {
-            List<Groups> groups = await client.GetGroups();
+            List<NetplayAPIClient.Data.Groups> groups = await client.GetGroups();
 
             groupsDropdown.Items.Clear();
 
@@ -87,7 +87,7 @@ namespace Chatter
             //Get install
 
 
-            var group = new NetplayAPIClient.Groups();
+            var group = new NetplayAPIClient.Data.Groups();
             group.groupDescription = "";
             group.groupName = groupNameText.Text;
             group.groupOwner = currentInstall.id;
@@ -101,6 +101,11 @@ namespace Chatter
             client = null;
             client = new NetplayAPIClient.Client("localhost", "24215");
             client.start(currentInstall.code);
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+
         }
     }
 }
