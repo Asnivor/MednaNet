@@ -38,6 +38,20 @@ namespace MednaNetAPIClient.Groups
             return groups;
         }
 
+        public async Task<Data.Groups> GetGroupById(int groupId)
+        {
+            Data.Groups group = null;
+
+            HttpResponseMessage response = await client.GetAsync("api/v1/groups/" + groupId.ToString());
+
+            if (response.IsSuccessStatusCode)
+            {
+                group = await response.Content.ReadAsAsync<Data.Groups>();
+            }
+
+            return group;
+        }
+
         /// <summary>
         /// Creates a new Group. Regardless of the value of group.groupOwner the owner of the group will always be the current install.
         /// </summary>
