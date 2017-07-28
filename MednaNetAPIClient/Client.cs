@@ -16,12 +16,19 @@ namespace MednaNetAPIClient
         private string port = "";
 
         private Groups.Groups groups = null;
-        private Installs.Installs intsall = null;
+        private Installs.Installs install = null;
 
         public Client(string apiHostname, string apiPort)
         {
             url = apiHostname.Replace("http://", "").Replace("https://", "");
             port = apiPort;
+
+            client.BaseAddress = new Uri("http://" + url + ":" + port + "/");
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            this.install = new Installs.Installs(client);
+            this.groups = new Groups.Groups(client);
         }
 
         public void SetInstallKey(string installKey)
@@ -30,17 +37,31 @@ namespace MednaNetAPIClient
             client.DefaultRequestHeaders.Add("Authorization", installKey);
         }
 
-        public void Connect(string installKey)
+        public async Task<Data.Installs> CreateInstall()
         {
-            client.BaseAddress = new Uri("http://" + url + ":" + port + "/");
-            client.DefaultRequestHeaders.Accept.Clear();
-            
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            client.DefaultRequestHeaders.Add("Authorization", installKey);
+            string installKey = await this.install.CreateNewInstall();
+            SetInstallKey(installKey);
+            return await this.install.GetCurrentInstall(true);
+        }
+
+        public async Task<Data.Installs> GetInstall(bool forceUpdate)
+        {
+            return await this.install.GetCurrentInstall(forceUpdate);
+        }
+     
+        public async Task<IEnumerable<Data.Groups>> GetAllGroups()
+        {
+            return await this.groups.GetGroups();
+        }
+
+        
+
+        public async Data.Groups GetGroupById(int groupId)
+        {
+
         }
 
 
-     
 
         public async Task<Uri> CreateMessage(Data.Messages message)
         {

@@ -244,7 +244,40 @@ namespace MednaNetAPI.Controllers
 
             return Ok();
         }
-        
+
+        [Route("api/v1/groups/{id}")]
+        [HttpPost]
+        public IHttpActionResult GetGroupById(int id)
+        {
+            IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
+            string installKey = headerValues.FirstOrDefault();
+
+            MednaNetAPIClient.Data.Groups group = null;
+
+            using (Models.MedLaunchChatEntities db = new Models.MedLaunchChatEntities())
+            {
+                var install = (from q in db.installs
+                               where q.code == installKey
+                               select q).FirstOrDefault();
+
+                if (install != null)
+                {
+                    group = (from q in db.groups
+                             where q.id == id
+                             select new MednaNetAPIClient.Data.Groups()
+                             {
+                                 groupDescription = q.group_description,
+                                 groupName = q.group_name,
+                                 groupOwner = q.group_owner,
+                                 id = q.id
+                             }).FirstOrDefault();
+                }
+
+                return Ok(group);
+
+            }
+        }
+
         [Route("api/v1/groups/{id}/messages")]
         [HttpPost]
         public IHttpActionResult CreateMessage(int id, MednaNetAPIClient.Data.Messages message)
