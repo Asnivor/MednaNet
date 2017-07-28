@@ -350,9 +350,23 @@ namespace MednaNetAPI.Controllers
 
                 if (install != null)
                 {
-                    var m = from q in db.groups
-                            where q.id == id && q.group_members.Select(b => b.install_id).Contains(install.id)
-                            select q.messages;
+                    //var m = from q in db.groups
+                    //     where q.id == id && q.group_members.Select(b => b.install_id).Contains(install.id)
+                    //    select q.messages;
+
+                    messages =
+                       (from g in db.groups
+                        from m in g.messages
+                        from gm in g.group_members
+                        where gm.install_id == install.id && g.id == id
+                        select new MednaNetAPIClient.Data.Messages()
+                        {
+                            channel = g.id,
+                            code = m.code,
+                            message = m.message1,
+                            name = m.name,
+                            postedOn = m.posted_on
+                        }).ToList();
                 }
             }
 
