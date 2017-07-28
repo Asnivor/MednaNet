@@ -8,10 +8,10 @@ using System.Net.Http.Headers;
 
 namespace MednaNetAPIClient.Groups
 {
-    class Groups
+    public class Groups
     {
         private string installKey = "";
-        private List<Data.Groups> installGroups = new List<Data.Groups>();
+        
         private HttpClient client = null;
 
         public Groups(HttpClient client)
@@ -25,7 +25,7 @@ namespace MednaNetAPIClient.Groups
         /// <param name="queryServer">If set to false the cached group list will be returned. If set to true then the web service will be queried for 
         /// the most up to date group list.</param>
         /// <returns></returns>
-        public async Task<IEnumerable<Data.Groups>> GetGroups(bool queryServer)
+        public async Task<IEnumerable<Data.Groups>> GetGroups()
         {
             List<Data.Groups> groups = null;
             HttpResponseMessage response = await client.GetAsync("api/v1/groups");
@@ -34,19 +34,8 @@ namespace MednaNetAPIClient.Groups
             {
                 groups = await response.Content.ReadAsAsync<List<Data.Groups>>();
             }
-            installGroups = groups;
-
-            return installGroups;
-        }
-
-        /// <summary>
-        /// Returns a list of Groups associated with install. If this is the first time GetGroups has been called it will query the web service, otherwise
-        /// the cached group list will be returned.
-        /// </summary>
-        /// <returns></returns>
-        public async Task<IEnumerable<Data.Groups>> GetGroups()
-        {
-            return await GetGroups(false);
+            
+            return groups;
         }
 
         /// <summary>
@@ -60,7 +49,6 @@ namespace MednaNetAPIClient.Groups
             response.EnsureSuccessStatusCode();
             return response.Headers.Location;
         }
-
 
         public async Task<IEnumerable<Data.Messages>> GetGroupMessages(int groupId)
         {

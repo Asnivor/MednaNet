@@ -8,9 +8,8 @@ using System.Net.Http;
 
 namespace MednaNetAPIClient.Installs
 {
-    class Installs
+    public class Installs
     {
-        private Data.Installs install = null;
         private HttpClient client = null;
 
         public Installs(HttpClient client)
@@ -41,32 +40,18 @@ namespace MednaNetAPIClient.Installs
         /// <param name="queryServer">If set to false the cached install will be returned. If set to true then the web service will be queried for 
         /// the most up to date install information.</param>
         /// <returns></returns>
-        public async Task<Data.Installs> GetCurrentInstall(bool queryServer)
-        {
-            if(this.install == null || queryServer == true)
-            {
-                HttpResponseMessage response = await client.GetAsync("api/v1/installs");
-                Data.Installs install = null;
-
-                if (response.IsSuccessStatusCode)
-                {
-                    install = await response.Content.ReadAsAsync<Data.Installs>();
-                }
-
-                this.install = install;
-            }
-
-            return this.install;
-        }
-
-        /// <summary>
-        /// Returns the current install. If this is the first time GetCurrentInstall has been called it will query the web service, otherwise
-        /// the cached group list will be returned.
-        /// </summary>
-        /// <returns></returns>
         public async Task<Data.Installs> GetCurrentInstall()
         {
-            return await GetCurrentInstall(false);
+            
+            HttpResponseMessage response = await client.GetAsync("api/v1/installs");
+            Data.Installs install = null;
+
+            if (response.IsSuccessStatusCode)
+            {
+                install = await response.Content.ReadAsAsync<Data.Installs>();
+            }
+
+            return install;
         }
 
         public async void CheckinInstall()
