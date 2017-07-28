@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chatter", "Chatter\Chatter.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MednaNetAPIClient", "MednaNetAPIClient\MednaNetAPIClient.csproj", "{AA7C3CF6-2C61-4B01-994C-F57634B2A695}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MednaNet-Bridge", "MednaNet-Bridge\MednaNet-Bridge.csproj", "{8A8E6E3A-EAB9-469A-87F0-205FBEA60972}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{AA7C3CF6-2C61-4B01-994C-F57634B2A695}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AA7C3CF6-2C61-4B01-994C-F57634B2A695}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AA7C3CF6-2C61-4B01-994C-F57634B2A695}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A8E6E3A-EAB9-469A-87F0-205FBEA60972}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A8E6E3A-EAB9-469A-87F0-205FBEA60972}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A8E6E3A-EAB9-469A-87F0-205FBEA60972}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A8E6E3A-EAB9-469A-87F0-205FBEA60972}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
