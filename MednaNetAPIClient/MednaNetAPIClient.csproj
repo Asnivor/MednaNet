@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Channels\Channels.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="ClientTest.cs" />
     <Compile Include="Data\Channels.cs" />

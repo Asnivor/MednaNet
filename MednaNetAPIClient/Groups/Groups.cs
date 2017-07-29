@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http;
-using System.Net.Http.Headers;
+
 
 namespace MednaNetAPIClient.Groups
 {
     public class Groups
     {
-        private string installKey = "";
+        
         
         private HttpClient client = null;
 
