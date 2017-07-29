@@ -51,6 +51,8 @@ namespace MednaNet_Bridge
 
         private async Task MessageReceived(SocketMessage message)
         {
+            //message.Channel.Name
+
             if (message.Content == "!ping")
             {
                 await message.Channel.SendMessageAsync("Pong!");
