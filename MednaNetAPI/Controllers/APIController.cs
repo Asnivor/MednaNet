@@ -13,7 +13,7 @@ namespace MednaNetAPI.Controllers
     {
         //http://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api#restful
 
-        
+
 
         [Route("api/v1/installs")]
         [HttpGet]
@@ -29,16 +29,16 @@ namespace MednaNetAPI.Controllers
                 using (Models.MedLaunchChatEntities db = new Models.MedLaunchChatEntities())
                 {
                     installs = (from q in db.installs
-                                   select new MednaNetAPIClient.Data.Installs()
-                                   {
-                                       banned = q.banned,
-                                       code = q.code,
-                                       lastCheckin = q.last_checkin,
-                                       registeredOn = q.registered_on,
-                                       tempBan = q.temp_ban,
-                                       tempBanEnd = q.temp_ban_end,
-                                       username = q.username
-                                   }).ToList();
+                                select new MednaNetAPIClient.Data.Installs()
+                                {
+                                    banned = q.banned,
+                                    code = q.code,
+                                    lastCheckin = q.last_checkin,
+                                    registeredOn = q.registered_on,
+                                    tempBan = q.temp_ban,
+                                    tempBanEnd = q.temp_ban_end,
+                                    username = q.username
+                                }).ToList();
                 }
             }
 
@@ -133,8 +133,8 @@ namespace MednaNetAPI.Controllers
             using (Models.MedLaunchChatEntities db = new Models.MedLaunchChatEntities())
             {
                 var install = (from q in db.installs
-                              where q.code == installKey
-                              select q).FirstOrDefault();
+                               where q.code == installKey
+                               select q).FirstOrDefault();
 
                 install.last_checkin = DateTime.Now;
 
@@ -142,7 +142,7 @@ namespace MednaNetAPI.Controllers
             }
 
             return Ok();
-                
+
         }
 
         [Route("api/v1/groups")]
@@ -163,14 +163,14 @@ namespace MednaNetAPI.Controllers
                 if (install != null)
                 {
                     groups = (from q in db.group_members
-                                where q.install_id == install.id
-                                select new MednaNetAPIClient.Data.Groups()
-                                {
-                                    groupDescription = q.@group.group_description,
-                                    groupName = q.@group.group_name,
-                                    groupOwner = q.@group.group_owner,
-                                    id = q.id
-                                } ).ToList();
+                              where q.install_id == install.id
+                              select new MednaNetAPIClient.Data.Groups()
+                              {
+                                  groupDescription = q.@group.group_description,
+                                  groupName = q.@group.group_name,
+                                  groupOwner = q.@group.group_owner,
+                                  id = q.id
+                              }).ToList();
                 }
             }
 
@@ -190,17 +190,17 @@ namespace MednaNetAPI.Controllers
             using (Models.MedLaunchChatEntities db = new Models.MedLaunchChatEntities())
             {
                 var install = (from q in db.installs
-                           where q.code == installKey
-                           select q).FirstOrDefault();
+                               where q.code == installKey
+                               select q).FirstOrDefault();
 
-                if(install != null)
+                if (install != null)
                 {
                     Models.group newGroup = new Models.group();
                     newGroup.group_description = group.groupDescription;
                     newGroup.group_name = group.groupName;
                     newGroup.group_owner = install.id;
 
-                    if(newGroup.group_name.Length > 20)
+                    if (newGroup.group_name.Length > 20)
                     {
                         newGroup.group_name = newGroup.group_name.Substring(0, 19);
                     }
@@ -212,7 +212,7 @@ namespace MednaNetAPI.Controllers
                         db.SaveChanges();
                         APIReturn.returnMessage = "Group created.";
                     }
-                    catch(Exception e)
+                    catch (Exception e)
                     {
                         APIReturn.returnMessage = "Could not create group.";
                         return new System.Web.Http.Results.ExceptionResult(e, this);
@@ -290,10 +290,10 @@ namespace MednaNetAPI.Controllers
             using (Models.MedLaunchChatEntities db = new Models.MedLaunchChatEntities())
             {
                 var install = (from q in db.installs
-                              where q.code == installKey
+                               where q.code == installKey
                                select q).FirstOrDefault();
 
-                if(install != null)
+                if (install != null)
                 {
                     if (install.banned)
                     {
@@ -330,7 +330,7 @@ namespace MednaNetAPI.Controllers
                 }
             }
 
-            return Ok(APIReturn);         
+            return Ok(APIReturn);
         }
 
         [Route("api/v1/groups/{id}/messages")]
@@ -415,6 +415,126 @@ namespace MednaNetAPI.Controllers
             return Ok(messages);
         }
 
-        
+
+        [Route("api/v1/discord/channels")]
+        [HttpGet]
+        public IHttpActionResult GetDiscordChannels()
+        {
+            IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
+            string installKey = headerValues.FirstOrDefault();
+
+            List<MednaNetAPIClient.Data.Channels> channels = null;
+
+            using (Models.MedLaunchChatEntities db = new Models.MedLaunchChatEntities())
+            {
+                channels =  (from q in db.discord_channels
+                               select new MednaNetAPIClient.Data.Channels()
+                               {
+                                   channelName = q.channel_name,
+                                   id = q.id
+                               }).ToList();
+            }
+
+            return Ok(channels);
+        }
+
+        [Route("api/v1/discord/channels/{id}")]
+        [HttpGet]
+        public IHttpActionResult GetDiscordChannel(int id)
+        {
+            IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
+            string installKey = headerValues.FirstOrDefault();
+
+            MednaNetAPIClient.Data.Channels channel = null;
+
+            using (Models.MedLaunchChatEntities db = new Models.MedLaunchChatEntities())
+            {
+                channel = (from q in db.discord_channels
+                           where q.id == id
+                            select new MednaNetAPIClient.Data.Channels()
+                            {
+                                channelName = q.channel_name,
+                                id = q.id
+                            }).FirstOrDefault();
+            }
+
+            return Ok(channel);
+        }
+
+        [Route("api/v1/discord/channels/{id}/messages")]
+        [HttpGet]
+        public IHttpActionResult GetChannelMessages(int id)
+        {
+            IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
+            string installKey = headerValues.FirstOrDefault();
+
+            List<MednaNetAPIClient.Data.Messages> messages = null;
+
+            using (Models.MedLaunchChatEntities db = new Models.MedLaunchChatEntities())
+            {
+                messages = (from q in db.discord_messages
+                            where q.channel == id
+                            select new MednaNetAPIClient.Data.Messages()
+                            {
+                                channel = q.channel,
+                                code = q.code,
+                                message = q.message,
+                                name = q.name,
+                                postedOn = q.posted_on
+                            }).ToList();
+            }
+
+            return Ok(messages);
+        }
+
+        [Route("api/v1/discord/channels/{id}/messages")]
+        [HttpPost]
+        public IHttpActionResult CreateDiscordMessage(int id, MednaNetAPIClient.Data.Messages message)
+        {
+            IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
+            string installKey = headerValues.FirstOrDefault();
+            var newRecord = new Models.discord_messages();
+            using (Models.MedLaunchChatEntities db = new Models.MedLaunchChatEntities())
+            {
+                var install = (from q in db.installs
+                               where q.code == installKey
+                               select q).FirstOrDefault();
+
+                if (install != null)
+                {
+                    if (install.banned)
+                    {
+                       
+                    }
+                    else
+                    {
+                        if (install.temp_ban)
+                        {
+                           
+                        }
+                        else
+                        {
+                            newRecord = new Models.discord_messages();
+
+                            newRecord.code = message.code;
+                            newRecord.message = message.message;
+                            newRecord.name = install.username;
+                            newRecord.posted_on = DateTime.Now;
+                            newRecord.channel = id;
+
+                            db.discord_messages.Add(newRecord);
+                            db.SaveChanges();
+
+                        }
+                    }
+                }
+                else
+                {
+                   
+                }
+            }
+
+            return Ok(newRecord);
+        }
     }
 }
