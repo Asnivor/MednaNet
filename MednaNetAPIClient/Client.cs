@@ -17,6 +17,7 @@ namespace MednaNetAPIClient
 
         private Groups.Groups groups = null;
         private Installs.Installs install = null;
+        private Channels.Channels channels = null;
 
 
         public Groups.Groups Group
@@ -35,18 +36,27 @@ namespace MednaNetAPIClient
             }
         }
 
+        public Channels.Channels Channels
+        {
+            get
+            {
+                return this.channels;
+            }
+        }
+
         public Client(string apiHostname, string apiPort, string installKey)
         {
             url = apiHostname.Replace("http://", "").Replace("https://", "");
             port = apiPort;
 
-            client.BaseAddress = new Uri("http://" + url + ":" + port + "/");
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            client.DefaultRequestHeaders.Add("Authorization", installKey);
+            this.client.BaseAddress = new Uri("http://" + url + ":" + port + "/");
+            this.client.DefaultRequestHeaders.Accept.Clear();
+            this.client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            this.client.DefaultRequestHeaders.Add("Authorization", installKey);
 
-            this.install = new Installs.Installs(client);
-            this.groups = new Groups.Groups(client);
+            this.install = new Installs.Installs(this.client);
+            this.groups = new Groups.Groups(this.client);
+            this.channels = new Channels.Channels(this.client);
         }
     }
 }

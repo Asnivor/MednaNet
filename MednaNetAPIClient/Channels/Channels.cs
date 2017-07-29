@@ -7,7 +7,7 @@ using System.Net.Http;
 
 namespace MednaNetAPIClient.Channels
 {
-    class Channels
+    public class Channels
     {
         private HttpClient client = null;
 
