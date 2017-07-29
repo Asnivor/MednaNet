@@ -5,6 +5,24 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="MedLaunchModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="discord_channels">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="channel_name" Type="varchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="discord_messages">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="posted_on" Type="datetime" Nullable="false" />
+          <Property Name="code" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="32" Nullable="false" />
+          <Property Name="message" Type="varchar" MaxLength="2000" Nullable="false" />
+          <Property Name="channel" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="group_members">
           <Key>
             <PropertyRef Name="id" />
@@ -47,6 +65,18 @@
           <Property Name="message" Type="varchar" MaxLength="2000" Nullable="false" />
           <Property Name="channel" Type="int" Nullable="false" />
         </EntityType>
+        <Association Name="FK_discord_messages_groups">
+          <End Role="discord_channels" Type="Self.discord_channels" Multiplicity="1" />
+          <End Role="discord_messages" Type="Self.discord_messages" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="discord_channels">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="discord_messages">
+              <PropertyRef Name="channel" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_group_members_groups">
           <End Role="groups" Type="Self.groups" Multiplicity="1" />
           <End Role="group_members" Type="Self.group_members" Multiplicity="*" />
@@ -72,10 +102,16 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="MedLaunchModelStoreContainer">
+          <EntitySet Name="discord_channels" EntityType="Self.discord_channels" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="discord_messages" EntityType="Self.discord_messages" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="group_members" EntityType="Self.group_members" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="groups" EntityType="Self.groups" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="installs" EntityType="Self.installs" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="messages" EntityType="Self.messages" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_discord_messages_groups" Association="Self.FK_discord_messages_groups">
+            <End Role="discord_channels" EntitySet="discord_channels" />
+            <End Role="discord_messages" EntitySet="discord_messages" />
+          </AssociationSet>
           <AssociationSet Name="FK_group_members_groups" Association="Self.FK_group_members_groups">
             <End Role="groups" EntitySet="groups" />
             <End Role="group_members" EntitySet="group_members" />
@@ -101,6 +137,12 @@
           <AssociationSet Name="FK_messages_groups" Association="MedLaunchModel.FK_messages_groups">
             <End Role="group" EntitySet="groups" />
             <End Role="message" EntitySet="messages" />
+          </AssociationSet>
+          <EntitySet Name="discord_channels" EntityType="MedLaunchModel.discord_channels" />
+          <EntitySet Name="discord_messages" EntityType="MedLaunchModel.discord_messages" />
+          <AssociationSet Name="FK_discord_messages_groups" Association="MedLaunchModel.FK_discord_messages_groups">
+            <End Role="discord_channels" EntitySet="discord_channels" />
+            <End Role="discord_messages" EntitySet="discord_messages" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="install">
@@ -173,6 +215,38 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="discord_channels">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="channel_name" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="discord_messages" Relationship="MedLaunchModel.FK_discord_messages_groups" FromRole="discord_channels" ToRole="discord_messages" />
+        </EntityType>
+        <EntityType Name="discord_messages">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="posted_on" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="code" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="false" />
+          <Property Name="message" Type="String" Nullable="false" MaxLength="2000" FixedLength="false" Unicode="false" />
+          <Property Name="channel" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="discord_channels" Relationship="MedLaunchModel.FK_discord_messages_groups" FromRole="discord_messages" ToRole="discord_channels" />
+        </EntityType>
+        <Association Name="FK_discord_messages_groups">
+          <End Type="MedLaunchModel.discord_channels" Role="discord_channels" Multiplicity="1" />
+          <End Type="MedLaunchModel.discord_messages" Role="discord_messages" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="discord_channels">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="discord_messages">
+              <PropertyRef Name="channel" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -218,6 +292,26 @@
               <MappingFragment StoreEntitySet="messages">
                 <ScalarProperty Name="channel" ColumnName="channel" />
                 <ScalarProperty Name="message1" ColumnName="message" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="code" ColumnName="code" />
+                <ScalarProperty Name="posted_on" ColumnName="posted_on" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="discord_channels">
+            <EntityTypeMapping TypeName="MedLaunchModel.discord_channels">
+              <MappingFragment StoreEntitySet="discord_channels">
+                <ScalarProperty Name="channel_name" ColumnName="channel_name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="discord_messages">
+            <EntityTypeMapping TypeName="MedLaunchModel.discord_messages">
+              <MappingFragment StoreEntitySet="discord_messages">
+                <ScalarProperty Name="channel" ColumnName="channel" />
+                <ScalarProperty Name="message" ColumnName="message" />
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="code" ColumnName="code" />
                 <ScalarProperty Name="posted_on" ColumnName="posted_on" />

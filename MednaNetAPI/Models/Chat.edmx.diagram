@@ -11,6 +11,9 @@
         <AssociationConnector Association="MedLaunchModel.FK_group_members_groups" />
         <EntityTypeShape EntityType="MedLaunchModel.message" Width="1.5" PointX="3.375" PointY="0.75" />
         <AssociationConnector Association="MedLaunchModel.FK_messages_groups" />
+        <EntityTypeShape EntityType="MedLaunchModel.discord_channels" Width="1.5" PointX="5.375" PointY="7.375" />
+        <EntityTypeShape EntityType="MedLaunchModel.discord_messages" Width="1.5" PointX="7.625" PointY="7" />
+        <AssociationConnector Association="MedLaunchModel.FK_discord_messages_groups" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
