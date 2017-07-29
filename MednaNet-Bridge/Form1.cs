@@ -15,6 +15,9 @@ namespace MednaNet_Bridge
     public partial class Form1 : Form
     {
         private DiscordSocketClient client;
+        private List<string> monitoredChannels = new List<string>();
+        private MednaNetAPIClient.Client apiClient;
+
         System.Timers.Timer r = new System.Timers.Timer(1000);
         public Form1()
         {
@@ -24,6 +27,9 @@ namespace MednaNet_Bridge
         private async void StartBot(object sender, EventArgs e)
         {
             await startBot();
+
+            monitoredChannels.Add("development");
+            this.apiClient = new MednaNetAPIClient.Client("localhost", "24215", "botInstallKey");
         }
 
         private async Task startBot()
@@ -52,6 +58,11 @@ namespace MednaNet_Bridge
         private async Task MessageReceived(SocketMessage message)
         {
             //message.Channel.Name
+
+            if (monitoredChannels.Contains(message.Channel.Name))
+            {
+                
+            }
 
             if (message.Content == "!ping")
             {

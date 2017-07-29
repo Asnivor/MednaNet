@@ -29,5 +29,7 @@ namespace MednaNetAPI.Models
         public virtual DbSet<group_members> group_members { get; set; }
         public virtual DbSet<group> groups { get; set; }
         public virtual DbSet<message> messages { get; set; }
+        public virtual DbSet<discord_channels> discord_channels { get; set; }
+        public virtual DbSet<discord_messages> discord_messages { get; set; }
     }
 }

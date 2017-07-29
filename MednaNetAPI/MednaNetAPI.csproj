@@ -176,6 +176,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Chat.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\discord_channels.cs">
+      <DependentUpon>Chat.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\discord_messages.cs">
+      <DependentUpon>Chat.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\group.cs">
       <DependentUpon>Chat.tt</DependentUpon>
     </Compile>
