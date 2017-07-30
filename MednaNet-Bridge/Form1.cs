@@ -63,7 +63,7 @@ namespace MednaNet_Bridge
 
             if (monitoredChannels.ContainsKey(message.Channel.Name))
             {
-               // MednaNetAPIClient.Data.Messages messages = this.apiClient.
+                //MednaNetAPIClient.Data.Messages messages = this.apiClient.Channels.
             }
 
             if (message.Content == "!ping")

@@ -44,9 +44,9 @@ namespace MednaNetAPIClient.Channels
         }
 
 
-        public async Task<IEnumerable<Data.Messages>> GetChannelMessages(int groupId)
+        public async Task<IEnumerable<Data.Messages>> GetChannelMessages(int channelId)
         {
-            HttpResponseMessage response = await client.GetAsync("api/v1/discord/channels/" + groupId.ToString() + "/messages");
+            HttpResponseMessage response = await client.GetAsync("api/v1/discord/channels/" + channelId.ToString() + "/messages");
             IEnumerable<Data.Messages> messages = null;
 
             if (response.IsSuccessStatusCode)
@@ -57,11 +57,11 @@ namespace MednaNetAPIClient.Channels
             return messages;
         }
 
-        public async Task<IEnumerable<Data.Messages>> GetChannelMessagesFrom(int groupId, DateTime from)
+        public async Task<IEnumerable<Data.Messages>> GetChannelMessagesFrom(int channelId, DateTime from)
         {
             string urlSafeDateString = from.ToUniversalTime().ToString("yyyyMMddTHHmmss", System.Globalization.CultureInfo.InvariantCulture);
 
-            HttpResponseMessage response = await client.GetAsync("api/v1/discord/channels/" + groupId.ToString() + "/messages/from/" + urlSafeDateString);
+            HttpResponseMessage response = await client.GetAsync("api/v1/discord/channels/" + channelId.ToString() + "/messages/from/" + urlSafeDateString);
             IEnumerable<Data.Messages> messages = null;
 
             if (response.IsSuccessStatusCode)
@@ -71,5 +71,13 @@ namespace MednaNetAPIClient.Channels
 
             return messages;
         }
+
+        public async void CreateMessage(int channelId, Data.Messages message)
+        {
+            HttpResponseMessage response = await client.PostAsJsonAsync("api/v1/discord/channels/" + channelId.ToString() + "/messages", message);
+            response.EnsureSuccessStatusCode();
+            //return response.Headers.Location;
+        }
+
     }
 }
