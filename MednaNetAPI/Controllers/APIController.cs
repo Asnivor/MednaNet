@@ -493,6 +493,11 @@ namespace MednaNetAPI.Controllers
         {
             IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
             string installKey = headerValues.FirstOrDefault();
+
+            string username = "";
+
+            
+
             var newRecord = new Models.discord_messages();
             using (Models.MedLaunchChatEntities db = new Models.MedLaunchChatEntities())
             {
@@ -514,11 +519,21 @@ namespace MednaNetAPI.Controllers
                         }
                         else
                         {
+
+                            if (installKey == "botInstallKey")
+                            {
+                                username = message.name;
+                            }
+                            else
+                            {
+                                username = install.username;
+                            }
+
                             newRecord = new Models.discord_messages();
 
                             newRecord.code = message.code;
                             newRecord.message = message.message;
-                            newRecord.name = install.username;
+                            newRecord.name = username;
                             newRecord.posted_on = DateTime.Now;
                             newRecord.channel = id;
 

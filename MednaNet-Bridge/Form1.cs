@@ -17,6 +17,7 @@ namespace MednaNet_Bridge
         private DiscordSocketClient client;
         private Dictionary<string, int> monitoredChannels = new Dictionary<string, int>();
         private MednaNetAPIClient.Client apiClient;
+        private string botInstallKey = "botInstallKey";
 
         System.Timers.Timer r = new System.Timers.Timer(1000);
         public Form1()
@@ -31,7 +32,7 @@ namespace MednaNet_Bridge
             monitoredChannels.Add("development", 1);
 
            // monitoredChannels.Add("development");
-            this.apiClient = new MednaNetAPIClient.Client("localhost", "24215", "botInstallKey");
+            this.apiClient = new MednaNetAPIClient.Client("localhost", "24215", this.botInstallKey);
         }
 
         private async Task startBot()
@@ -63,7 +64,15 @@ namespace MednaNet_Bridge
 
             if (monitoredChannels.ContainsKey(message.Channel.Name))
             {
-                //MednaNetAPIClient.Data.Messages messages = this.apiClient.Channels.
+                //IEnumerable<MednaNetAPIClient.Data.Messages> messages = await this.apiClient.Channels.GetChannelMessages(monitoredChannels[message.Channel.Name]);
+                this.apiClient.Channels.CreateMessage(monitoredChannels[message.Channel.Name], new MednaNetAPIClient.Data.Messages()
+                {
+                    channel = monitoredChannels[message.Channel.Name],
+                    code = this.botInstallKey,
+                    message = message.Content,
+                    name = message.Author.Username,
+                    postedOn = message.CreatedAt.LocalDateTime
+                });
             }
 
             if (message.Content == "!ping")
