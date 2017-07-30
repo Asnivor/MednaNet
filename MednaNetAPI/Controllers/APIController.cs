@@ -536,5 +536,43 @@ namespace MednaNetAPI.Controllers
 
             return Ok(newRecord);
         }
+
+        [Route("api/v1/discord/channels/{id}/messages/from/{from}")]
+        [HttpGet]
+        public IHttpActionResult GetChannelMessagesFrom(int id, string from)
+        {
+            IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
+            string installKey = headerValues.FirstOrDefault();
+
+            DateTime fromDate = DateTime.ParseExact(from, "yyyyMMddTHHmmss", System.Globalization.CultureInfo.InvariantCulture).ToLocalTime();
+
+            List<MednaNetAPIClient.Data.Messages> messages = null;
+
+            using (Models.MedLaunchChatEntities db = new Models.MedLaunchChatEntities())
+            {
+                var install = (from q in db.installs
+                               where q.code == installKey
+                               select q).FirstOrDefault();
+
+                if (install != null)
+                {
+
+                    messages =
+                        (from g in db.discord_channels
+                         from m in g.discord_messages
+                         where m.posted_on > fromDate
+                         select new MednaNetAPIClient.Data.Messages()
+                         {
+                             channel = g.id,
+                             code = m.code,
+                             message = m.message,
+                             name = m.name,
+                             postedOn = m.posted_on
+                         }).ToList();
+                }
+            }
+
+            return Ok(messages);
+        }
     }
 }
