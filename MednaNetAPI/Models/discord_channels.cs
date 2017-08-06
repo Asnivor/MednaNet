@@ -22,6 +22,7 @@ namespace MednaNetAPI.Models
     
         public int id { get; set; }
         public string channel_name { get; set; }
+        public string channel_discord_id { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<discord_messages> discord_messages { get; set; }

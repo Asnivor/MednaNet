@@ -25,11 +25,11 @@ namespace MednaNetAPI.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<install> installs { get; set; }
         public virtual DbSet<group_members> group_members { get; set; }
         public virtual DbSet<group> groups { get; set; }
         public virtual DbSet<message> messages { get; set; }
         public virtual DbSet<discord_channels> discord_channels { get; set; }
         public virtual DbSet<discord_messages> discord_messages { get; set; }
+        public virtual DbSet<install> installs { get; set; }
     }
 }

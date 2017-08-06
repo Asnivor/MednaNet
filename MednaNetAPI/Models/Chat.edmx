@@ -11,6 +11,7 @@
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="channel_name" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="channel_discord_id" Type="varchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="discord_messages">
           <Key>
@@ -126,7 +127,6 @@
     <edmx:ConceptualModels>
       <Schema Namespace="MedLaunchModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="MedLaunchChatEntities" annotation:LazyLoadingEnabled="true" >
-          <EntitySet Name="installs" EntityType="MedLaunchModel.install" />
           <EntitySet Name="group_members" EntityType="MedLaunchModel.group_members" />
           <EntitySet Name="groups" EntityType="MedLaunchModel.group" />
           <AssociationSet Name="FK_group_members_groups" Association="MedLaunchModel.FK_group_members_groups">
@@ -144,20 +144,8 @@
             <End Role="discord_channels" EntitySet="discord_channels" />
             <End Role="discord_messages" EntitySet="discord_messages" />
           </AssociationSet>
+          <EntitySet Name="installs" EntityType="MedLaunchModel.install" />
         </EntityContainer>
-        <EntityType Name="install">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="registered_on" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="code" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="banned" Type="Boolean" Nullable="false" />
-          <Property Name="temp_ban" Type="Boolean" Nullable="false" />
-          <Property Name="temp_ban_end" Type="DateTime" Precision="3" />
-          <Property Name="last_checkin" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="username" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="false" />
-        </EntityType>
         <EntityType Name="group_members">
           <Key>
             <PropertyRef Name="id" />
@@ -222,6 +210,7 @@
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="channel_name" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="discord_messages" Relationship="MedLaunchModel.FK_discord_messages_groups" FromRole="discord_channels" ToRole="discord_messages" />
+          <Property Name="channel_discord_id" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="discord_messages">
           <Key>
@@ -247,26 +236,25 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="install">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="registered_on" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="code" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="banned" Type="Boolean" Nullable="false" />
+          <Property Name="temp_ban" Type="Boolean" Nullable="false" />
+          <Property Name="temp_ban_end" Type="DateTime" Precision="3" />
+          <Property Name="last_checkin" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="username" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="MedLaunchModelStoreContainer" CdmEntityContainer="MedLaunchChatEntities" >
-          <EntitySetMapping Name="installs">
-            <EntityTypeMapping TypeName="MedLaunchModel.install">
-              <MappingFragment StoreEntitySet="installs">
-                <ScalarProperty Name="username" ColumnName="username" />
-                <ScalarProperty Name="last_checkin" ColumnName="last_checkin" />
-                <ScalarProperty Name="temp_ban_end" ColumnName="temp_ban_end" />
-                <ScalarProperty Name="temp_ban" ColumnName="temp_ban" />
-                <ScalarProperty Name="banned" ColumnName="banned" />
-                <ScalarProperty Name="code" ColumnName="code" />
-                <ScalarProperty Name="registered_on" ColumnName="registered_on" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="group_members">
             <EntityTypeMapping TypeName="MedLaunchModel.group_members">
               <MappingFragment StoreEntitySet="group_members">
@@ -302,6 +290,7 @@
           <EntitySetMapping Name="discord_channels">
             <EntityTypeMapping TypeName="MedLaunchModel.discord_channels">
               <MappingFragment StoreEntitySet="discord_channels">
+                <ScalarProperty Name="channel_discord_id" ColumnName="channel_discord_id" />
                 <ScalarProperty Name="channel_name" ColumnName="channel_name" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
@@ -315,6 +304,20 @@
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="code" ColumnName="code" />
                 <ScalarProperty Name="posted_on" ColumnName="posted_on" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="installs">
+            <EntityTypeMapping TypeName="MedLaunchModel.install">
+              <MappingFragment StoreEntitySet="installs">
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="last_checkin" ColumnName="last_checkin" />
+                <ScalarProperty Name="temp_ban_end" ColumnName="temp_ban_end" />
+                <ScalarProperty Name="temp_ban" ColumnName="temp_ban" />
+                <ScalarProperty Name="banned" ColumnName="banned" />
+                <ScalarProperty Name="code" ColumnName="code" />
+                <ScalarProperty Name="registered_on" ColumnName="registered_on" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>

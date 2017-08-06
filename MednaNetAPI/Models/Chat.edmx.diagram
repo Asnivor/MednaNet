@@ -5,7 +5,6 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="be81aa253c234da6b8584c3870c74f0d" Name="Diagram1" >
-        <EntityTypeShape EntityType="MedLaunchModel.install" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="MedLaunchModel.group_members" Width="1.5" PointX="5.625" PointY="3.875" />
         <EntityTypeShape EntityType="MedLaunchModel.group" Width="1.5" PointX="3.375" PointY="3.875" />
         <AssociationConnector Association="MedLaunchModel.FK_group_members_groups" />
@@ -14,6 +13,7 @@
         <EntityTypeShape EntityType="MedLaunchModel.discord_channels" Width="1.5" PointX="5.375" PointY="7.375" />
         <EntityTypeShape EntityType="MedLaunchModel.discord_messages" Width="1.5" PointX="7.625" PointY="7" />
         <AssociationConnector Association="MedLaunchModel.FK_discord_messages_groups" />
+        <EntityTypeShape EntityType="MedLaunchModel.install" Width="1.5" PointX="0.75" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

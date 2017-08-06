@@ -576,6 +576,7 @@ namespace MednaNetAPI.Controllers
                         (from g in db.discord_channels
                          from m in g.discord_messages
                          where m.posted_on > fromDate
+                         orderby m.posted_on
                          select new MednaNetAPIClient.Data.Messages()
                          {
                              channel = g.id,
