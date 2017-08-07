@@ -33,6 +33,11 @@
             this.label1 = new System.Windows.Forms.Label();
             this.treeView1 = new System.Windows.Forms.TreeView();
             this.messageBox = new System.Windows.Forms.TextBox();
+            this.message = new System.Windows.Forms.TextBox();
+            this.button2 = new System.Windows.Forms.Button();
+            this.username = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // button1
@@ -77,11 +82,58 @@
             this.messageBox.Size = new System.Drawing.Size(469, 168);
             this.messageBox.TabIndex = 4;
             // 
+            // message
+            // 
+            this.message.Location = new System.Drawing.Point(12, 400);
+            this.message.Name = "message";
+            this.message.Size = new System.Drawing.Size(218, 20);
+            this.message.TabIndex = 5;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(12, 426);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(218, 23);
+            this.button2.TabIndex = 6;
+            this.button2.Text = "Post Message";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // username
+            // 
+            this.username.Location = new System.Drawing.Point(12, 361);
+            this.username.Name = "username";
+            this.username.Size = new System.Drawing.Size(218, 20);
+            this.username.TabIndex = 7;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(13, 345);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(55, 13);
+            this.label2.TabIndex = 8;
+            this.label2.Text = "Username";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(13, 384);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(50, 13);
+            this.label3.TabIndex = 9;
+            this.label3.Text = "Message";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(717, 461);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.username);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.message);
             this.Controls.Add(this.messageBox);
             this.Controls.Add(this.treeView1);
             this.Controls.Add(this.label1);
@@ -101,6 +153,11 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TreeView treeView1;
         private System.Windows.Forms.TextBox messageBox;
+        private System.Windows.Forms.TextBox message;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.TextBox username;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
     }
 }
 

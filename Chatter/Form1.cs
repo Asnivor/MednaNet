@@ -64,5 +64,17 @@ namespace Chatter
 
             
         }
+
+        private async void button2_Click(object sender, EventArgs e)
+        {
+            client.Channels.CreateMessage(1, new MednaNetAPIClient.Data.Messages()
+            {
+                channel = 1,
+                code = installKey.Text,
+                message = message.Text,
+                name = username.Text,
+                postedOn = DateTime.Now
+            });
+        }
     }
 }

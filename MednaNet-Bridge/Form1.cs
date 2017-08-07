@@ -21,58 +21,67 @@ namespace MednaNet_Bridge
         private string botInstallKey = "botInstallKey";
         private DateTime lastMessageUpdateFrom = DateTime.Now;
         private bool isUpdating = false;
-        
+        private bool isFirst = true;
+        private Dictionary<int, int> monitoredChannelsLastMessageId = new Dictionary<int, int>();
+
+        public void Test()
+        {
+            System.Timers.Timer t = new System.Timers.Timer(5000);
+            t.AutoReset = true;
+            t.Elapsed += T_Elapsed;
+            t.Start();
+        }
+
+        private void T_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            getMessages();
+        }
+
+      
+
         public Form1()
         {
             InitializeComponent();
             
         }
 
-        void run()
-        {
-            CancellationTokenSource cancellation = new CancellationTokenSource(TimeSpan.FromSeconds(8));
-            RepeatActionEvery(() => getMessages(), TimeSpan.FromSeconds(1), cancellation.Token).Wait();
-            
-        }
-
-        public static async Task RepeatActionEvery(Action action, TimeSpan interval, CancellationToken cancellationToken)
-        {
-            while (true)
-            {
-                action();
-                Task task = Task.Delay(interval, cancellationToken);
-
-                try
-                {
-                    await task;
-                }
-
-                catch (TaskCanceledException)
-                {
-                    return;
-                }
-            }
-        }
+      
 
         private async void getMessages()
         {
-            //
+            
             if (!this.isUpdating)
             {
                 this.isUpdating = true;
-                foreach (var s in monitoredChannels)
+
+
+                if (isFirst)
                 {
-                    IEnumerable<MednaNetAPIClient.Data.Messages> messages = await this.apiClient.Channels.GetChannelMessagesFrom(Convert.ToInt32(s.Value), this.lastMessageUpdateFrom);
-
-                    foreach (var message in messages.ToList())
+                    isFirst = false;
+                    foreach (var s in monitoredChannels)
                     {
-                        if (message.code != botInstallKey)
-                        {
-                            var ch = this.client.GetChannel(Convert.ToUInt64(s.Value.Value)) as ISocketMessageChannel;
-                            await ch.SendMessageAsync(message.name + ": " + System.Environment.NewLine + message.message);
-                        }
+                        MednaNetAPIClient.Data.Messages message = await this.apiClient.Channels.GetChannelLastMessage(Convert.ToInt32(s.Value.Key));
+                        monitoredChannelsLastMessageId[s.Value.Key] = message.id;
                     }
+                }
+                else
+                {
+                    foreach (var s in monitoredChannels)
+                    {
+                        IEnumerable<MednaNetAPIClient.Data.Messages> messages = await this.apiClient.Channels.GetChannelMessagesAfterMessageId(Convert.ToInt32(s.Value.Key), monitoredChannelsLastMessageId[s.Value.Key]);
 
+                        foreach (var message in messages.ToList())
+                        {
+                            if (message.code != botInstallKey)
+                            {
+                                var ch = this.client.GetChannel(Convert.ToUInt64(s.Value.Value)) as ISocketMessageChannel;
+                                await ch.SendMessageAsync("(" + message.postedOn.ToString() + ") **" + message.name + "**: " + message.message);
+
+                                monitoredChannelsLastMessageId[s.Value.Key] = message.id;
+                            }
+                        }
+
+                    }
                 }
 
                 this.isUpdating = false;
@@ -84,9 +93,12 @@ namespace MednaNet_Bridge
             await startBot();
 
             monitoredChannels.Add("development", new KeyValuePair<int, string>(1, "335445676227952640"));
+            monitoredChannelsLastMessageId.Add(1, 0);
 
            // monitoredChannels.Add("development");
             this.apiClient = new MednaNetAPIClient.Client("localhost", "24215", this.botInstallKey);
+
+            Test();
         }
 
         private async Task startBot()

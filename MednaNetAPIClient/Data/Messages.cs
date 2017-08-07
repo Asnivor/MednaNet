@@ -8,6 +8,7 @@ namespace MednaNetAPIClient.Data
 {
     public class Messages
     {
+        public int id { get; set; }
         public string code { get; set; }
         public string message { get; set; }
         public DateTime postedOn { get; set; }
