@@ -15,35 +15,7 @@ namespace MednaNetAPI.Controllers
 
 
 
-        [Route("api/v1/installs")]
-        [HttpGet]
-        public IHttpActionResult GetInstalls()
-        {
-            IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
-            string installKey = headerValues.FirstOrDefault();
-
-            List<MednaNetAPIClient.Data.Installs> installs = null;
-
-            if (installKey == "supersecret")
-            {
-                using (Models.MedLaunchChatEntities db = new Models.MedLaunchChatEntities())
-                {
-                    installs = (from q in db.installs
-                                select new MednaNetAPIClient.Data.Installs()
-                                {
-                                    banned = q.banned,
-                                    code = q.code,
-                                    lastCheckin = q.last_checkin,
-                                    registeredOn = q.registered_on,
-                                    tempBan = q.temp_ban,
-                                    tempBanEnd = q.temp_ban_end,
-                                    username = q.username
-                                }).ToList();
-                }
-            }
-
-            return Ok(installs);
-        }
+        
 
         [Route("api/v1/installs")]
         [HttpPost]
@@ -67,32 +39,7 @@ namespace MednaNetAPI.Controllers
             return Ok(guid);
         }
 
-        //Should only be used as an admin function. Needs to be locked so only called by a specific admin install key
-        [Route("api/v1/installs/{installKey}")]
-        [HttpGet]
-        public IHttpActionResult GetInstall(string installKey)
-        {
-            MednaNetAPIClient.Data.Installs install = null;
-
-            using (Models.MedLaunchChatEntities db = new Models.MedLaunchChatEntities())
-            {
-                install = (from q in db.installs
-                           where q.code == installKey
-                           select new MednaNetAPIClient.Data.Installs()
-                           {
-                               id = q.id,
-                               banned = q.banned,
-                               code = q.code,
-                               lastCheckin = q.last_checkin,
-                               registeredOn = q.registered_on,
-                               tempBan = q.temp_ban,
-                               tempBanEnd = q.temp_ban_end,
-                               username = q.username
-                           }).FirstOrDefault();
-            }
-
-            return Ok(install);
-        }
+       
 
         [Route("api/v1/installs")]
         [HttpGet]
@@ -473,14 +420,15 @@ namespace MednaNetAPI.Controllers
             using (Models.MedLaunchChatEntities db = new Models.MedLaunchChatEntities())
             {
                 messages = (from q in db.discord_messages
-                            where q.channel == id
+                            where q.channel == id && !q.clients_ignore
                             select new MednaNetAPIClient.Data.Messages()
                             {
                                 channel = q.channel,
                                 code = q.code,
                                 message = q.message,
                                 name = q.name,
-                                postedOn = q.posted_on
+                                postedOn = q.posted_on,
+                                id = q.id
                             }).ToList();
             }
 
@@ -495,7 +443,7 @@ namespace MednaNetAPI.Controllers
             string installKey = headerValues.FirstOrDefault();
 
             string username = "";
-
+            bool clientIgnore = false;
             
 
             var newRecord = new Models.discord_messages();
@@ -523,6 +471,7 @@ namespace MednaNetAPI.Controllers
                             if (installKey == "botInstallKey")
                             {
                                 username = message.name;
+                               
                             }
                             else
                             {
@@ -536,6 +485,7 @@ namespace MednaNetAPI.Controllers
                             newRecord.name = username;
                             newRecord.posted_on = DateTime.Now;
                             newRecord.channel = id;
+                            newRecord.clients_ignore = clientIgnore;
 
                             db.discord_messages.Add(newRecord);
                             db.SaveChanges();
@@ -576,7 +526,7 @@ namespace MednaNetAPI.Controllers
                     message =
                         (from g in db.discord_channels
                          from m in g.discord_messages
-                         
+                         where !m.clients_ignore
                          orderby m.id descending
                          select new MednaNetAPIClient.Data.Messages()
                          {
@@ -616,7 +566,7 @@ namespace MednaNetAPI.Controllers
                     messages =
                         (from g in db.discord_channels
                          from m in g.discord_messages
-                         where m.posted_on > fromDate
+                         where m.posted_on > fromDate && !m.clients_ignore
                          orderby m.posted_on
                          select new MednaNetAPIClient.Data.Messages()
                          {
@@ -655,7 +605,7 @@ namespace MednaNetAPI.Controllers
                     messages =
                         (from g in db.discord_channels
                          from m in g.discord_messages
-                         where m.id > messageId
+                         where m.id > messageId && !m.clients_ignore
                          orderby m.posted_on
                          select new MednaNetAPIClient.Data.Messages()
                          {

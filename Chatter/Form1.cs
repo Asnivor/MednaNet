@@ -14,67 +14,120 @@ namespace Chatter
     public partial class Form1 : Form
     {
         MednaNetAPIClient.Client client;
-        
-
+        private Dictionary<int, int> lastChannelMessageId = new Dictionary<int, int>();
+        private int currentChannel = 0;
+        private MednaNetAPIClient.Data.Installs currentInstall = null;
 
         public Form1()
         {
             InitializeComponent();
-           
 
+            System.Timers.Timer t = new System.Timers.Timer(5000);
+            t.SynchronizingObject = this; 
+            t.AutoReset = true;
+            t.Elapsed += T_Elapsed; ;
+            t.Start();
         }
 
-
+        private void T_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            if(this.currentChannel != 0)
+            {
+                displayMessages(this.currentChannel);
+            }
+        }
 
         private async void LoadClient(object sender, EventArgs e)
         {
             this.client = new MednaNetAPIClient.Client("localhost", "24215", "562ad8ef-12c4-4596-ac58-f5021749541b");
 
-            IEnumerable<MednaNetAPIClient.Data.Groups> groups = await this.client.Group.GetGroups();
+            currentInstall = await this.client.Install.GetCurrentInstall();
+
+            IEnumerable<MednaNetAPIClient.Data.Channels> channels = await this.client.Channels.GetChannels();
+
+            
 
             List<TreeNode> nodes = new List<TreeNode>();
 
-            foreach(var g in groups)
+            foreach(var c in channels)
             {
-                nodes.Add(new TreeNode(g.id.ToString()));
+
+                var tempNode = new TreeNode(c.channelName);
+                tempNode.Tag = c.id;
+
+                nodes.Add(tempNode);
             }
 
-            TreeNode treeNode = new TreeNode("Groups", nodes.ToArray());
+            TreeNode treeNode = new TreeNode("Channels", nodes.ToArray());
             treeView1.Nodes.Add(treeNode);
             treeView1.NodeMouseClick += loadMessages;
         }
 
-        private async void loadMessages(object sender, TreeNodeMouseClickEventArgs e)
+        private void loadMessages(object sender, TreeNodeMouseClickEventArgs e)
         {
-            int number;
-
-            bool result = Int32.TryParse(e.Node.Text, out number);
-            if (result)
+           if(e.Node.Tag != null)
             {
-                IEnumerable<MednaNetAPIClient.Data.Messages> messages = await client.Group.GetGroupMessages(Convert.ToInt32(e.Node.Text));
+                currentChannel = (int)e.Node.Tag;
+                messageBox.Text = "Loading...";
+            }
+        }
+
+        private async void displayMessages(int channelId)
+        {
+            if (lastChannelMessageId.ContainsKey(channelId))
+            {
+                IEnumerable<MednaNetAPIClient.Data.Messages> messages = await client.Channels.GetChannelMessagesAfterMessageId(channelId, lastChannelMessageId[channelId]);
 
                 foreach (var message in messages)
                 {
-                    messageBox.Text += message.name + " @ " + message.postedOn.ToString() + System.Environment.NewLine;
-                    messageBox.Text += message.message + System.Environment.NewLine;
-                    messageBox.Text += System.Environment.NewLine;
-                    messageBox.Text += System.Environment.NewLine;
+                    messageBox.AppendText(message.name + " @ " + message.postedOn.ToString() + System.Environment.NewLine);
+                    messageBox.AppendText(message.message + System.Environment.NewLine);
+                    messageBox.AppendText(System.Environment.NewLine);
+
+                    lastChannelMessageId[channelId] = message.id;
                 }
             }
+            else
+            {
+                IEnumerable<MednaNetAPIClient.Data.Messages> messages = await client.Channels.GetChannelMessages(channelId);
 
-            
+                foreach (var message in messages)
+                {
+                    messageBox.AppendText(message.name + " @ " + message.postedOn.ToString() + System.Environment.NewLine);
+                    messageBox.AppendText(message.message + System.Environment.NewLine);
+                    messageBox.AppendText(System.Environment.NewLine);
+
+                    if (lastChannelMessageId.ContainsKey(channelId))
+                    {
+                        lastChannelMessageId[channelId] = message.id;
+                    }
+                    else
+                    {
+                        lastChannelMessageId.Add(channelId, message.id);
+                    }
+
+                }
+            }
         }
 
         private async void button2_Click(object sender, EventArgs e)
         {
-            client.Channels.CreateMessage(1, new MednaNetAPIClient.Data.Messages()
+            DateTime postTime = DateTime.Now;
+
+            messageBox.AppendText(currentInstall.username + " @ " + postTime.ToString() + System.Environment.NewLine);
+            messageBox.AppendText(message.Text + System.Environment.NewLine);
+            messageBox.AppendText(System.Environment.NewLine);
+
+            MednaNetAPIClient.Data.Messages newMessage = await client.Channels.CreateMessage(1, new MednaNetAPIClient.Data.Messages()
             {
-                channel = 1,
+                channel = this.currentChannel,
                 code = installKey.Text,
                 message = message.Text,
-                name = username.Text,
-                postedOn = DateTime.Now
+                name = "", //This does nothing, the username is install specific and the API takes it from the database.
+                postedOn = postTime
             });
+
+            lastChannelMessageId[this.currentChannel] = newMessage.id;
         }
     }
 }

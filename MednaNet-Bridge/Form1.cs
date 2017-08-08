@@ -56,7 +56,12 @@ namespace MednaNet_Bridge
                     foreach (var s in monitoredChannels)
                     {
                         MednaNetAPIClient.Data.Messages message = await this.apiClient.Channels.GetChannelLastMessage(Convert.ToInt32(s.channelId));
-                        s.lastMessageId = message.id;
+
+                        if(message != null)
+                        {
+                            s.lastMessageId = message.id;
+                        }
+                        
                     }
                 }
                 else
@@ -93,6 +98,15 @@ namespace MednaNet_Bridge
                 lastMessageId = 0
             });
 
+            monitoredChannels.Add(new Data.MonitoredChannel()
+            {
+                channelName = "general",
+                channelId = 2,
+                discordChannelId = "334657816717688832",
+                lastMessageId = 0
+            });
+
+
             await startBot();
 
             this.apiClient = new MednaNetAPIClient.Client("localhost", "24215", this.botInstallKey);
@@ -125,21 +139,25 @@ namespace MednaNet_Bridge
 
         private async Task MessageReceived(SocketMessage message)
         {
-            if (monitoredChannels.Exists(x => x.channelName == message.Channel.Name))
+            //Don't add the message if is a message that the bot has posted.
+            if (message.Author.Id != 335858899049512960) //This is the Bots ID
             {
-                var channel = monitoredChannels.Where(x => x.channelName == message.Channel.Name).FirstOrDefault();
-
-                if(channel != null)
+                if (monitoredChannels.Exists(x => x.channelName == message.Channel.Name))
                 {
-                    this.apiClient.Channels.CreateMessage(channel.channelId, new MednaNetAPIClient.Data.Messages()
+                    var channel = monitoredChannels.Where(x => x.channelName == message.Channel.Name).FirstOrDefault();
+
+                    if (channel != null)
                     {
-                        channel = channel.channelId,
-                        code = this.botInstallKey,
-                        message = message.Content,
-                        name = message.Author.Username,
-                        postedOn = message.CreatedAt.LocalDateTime
-                    });
-                }   
+                        await this.apiClient.Channels.CreateMessage(channel.channelId, new MednaNetAPIClient.Data.Messages()
+                        {
+                            channel = channel.channelId,
+                            code = this.botInstallKey,
+                            message = message.Content,
+                            name = message.Author.Username,
+                            postedOn = message.CreatedAt.LocalDateTime
+                        });
+                    }
+                }
             }
         }
     }

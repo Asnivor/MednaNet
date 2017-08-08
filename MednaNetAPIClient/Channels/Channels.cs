@@ -60,14 +60,14 @@ namespace MednaNetAPIClient.Channels
         public async Task<Data.Messages> GetChannelLastMessage(int channelId)
         {
             HttpResponseMessage response = await client.GetAsync("api/v1/discord/channels/" + channelId.ToString() + "/messages/last");
-            Data.Messages messages = null;
+            Data.Messages message = null;
 
             if (response.IsSuccessStatusCode)
             {
-                messages = await response.Content.ReadAsAsync<Data.Messages>();
+                message = await response.Content.ReadAsAsync<Data.Messages>();
             }
 
-            return messages;
+            return message;
         }
 
         public async Task<IEnumerable<Data.Messages>> GetChannelMessagesFrom(int channelId, DateTime from)
@@ -100,11 +100,20 @@ namespace MednaNetAPIClient.Channels
             return messages;
         }
 
-        public async void CreateMessage(int channelId, Data.Messages message)
+        public async Task<Data.Messages> CreateMessage(int channelId, Data.Messages message)
         {
             HttpResponseMessage response = await client.PostAsJsonAsync("api/v1/discord/channels/" + channelId.ToString() + "/messages", message);
             response.EnsureSuccessStatusCode();
-            //return response.Headers.Location;
+
+            Data.Messages newMessage = null;
+
+            if (response.IsSuccessStatusCode)
+            {
+                newMessage = await response.Content.ReadAsAsync<Data.Messages>();
+            }
+
+            return newMessage;
+            
         }
 
     }

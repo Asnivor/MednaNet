@@ -23,6 +23,7 @@
           <Property Name="name" Type="varchar" MaxLength="32" Nullable="false" />
           <Property Name="message" Type="varchar" MaxLength="2000" Nullable="false" />
           <Property Name="channel" Type="int" Nullable="false" />
+          <Property Name="clients_ignore" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="group_members">
           <Key>
@@ -223,6 +224,7 @@
           <Property Name="message" Type="String" Nullable="false" MaxLength="2000" FixedLength="false" Unicode="false" />
           <Property Name="channel" Type="Int32" Nullable="false" />
           <NavigationProperty Name="discord_channels" Relationship="MedLaunchModel.FK_discord_messages_groups" FromRole="discord_messages" ToRole="discord_channels" />
+          <Property Name="clients_ignore" Type="Boolean" Nullable="false" />
         </EntityType>
         <Association Name="FK_discord_messages_groups">
           <End Type="MedLaunchModel.discord_channels" Role="discord_channels" Multiplicity="1" />
@@ -299,6 +301,7 @@
           <EntitySetMapping Name="discord_messages">
             <EntityTypeMapping TypeName="MedLaunchModel.discord_messages">
               <MappingFragment StoreEntitySet="discord_messages">
+                <ScalarProperty Name="clients_ignore" ColumnName="clients_ignore" />
                 <ScalarProperty Name="channel" ColumnName="channel" />
                 <ScalarProperty Name="message" ColumnName="message" />
                 <ScalarProperty Name="name" ColumnName="name" />
