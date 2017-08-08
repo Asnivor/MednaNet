@@ -16,15 +16,15 @@ namespace MednaNet_Bridge
     public partial class Form1 : Form
     {
         private DiscordSocketClient client;
-        private Dictionary<string, KeyValuePair<int, string>> monitoredChannels = new Dictionary<string, KeyValuePair<int, string>>();
+        private List<Data.MonitoredChannel> monitoredChannels = new List<Data.MonitoredChannel>();
         private MednaNetAPIClient.Client apiClient;
         private string botInstallKey = "botInstallKey";
         private DateTime lastMessageUpdateFrom = DateTime.Now;
         private bool isUpdating = false;
         private bool isFirst = true;
-        private Dictionary<int, int> monitoredChannelsLastMessageId = new Dictionary<int, int>();
+        
 
-        public void Test()
+        public void SetupTimer()
         {
             System.Timers.Timer t = new System.Timers.Timer(5000);
             t.AutoReset = true;
@@ -37,19 +37,14 @@ namespace MednaNet_Bridge
             getMessages();
         }
 
-      
-
         public Form1()
         {
             InitializeComponent();
             
         }
 
-      
-
         private async void getMessages()
         {
-            
             if (!this.isUpdating)
             {
                 this.isUpdating = true;
@@ -60,24 +55,24 @@ namespace MednaNet_Bridge
                     isFirst = false;
                     foreach (var s in monitoredChannels)
                     {
-                        MednaNetAPIClient.Data.Messages message = await this.apiClient.Channels.GetChannelLastMessage(Convert.ToInt32(s.Value.Key));
-                        monitoredChannelsLastMessageId[s.Value.Key] = message.id;
+                        MednaNetAPIClient.Data.Messages message = await this.apiClient.Channels.GetChannelLastMessage(Convert.ToInt32(s.channelId));
+                        s.lastMessageId = message.id;
                     }
                 }
                 else
                 {
                     foreach (var s in monitoredChannels)
                     {
-                        IEnumerable<MednaNetAPIClient.Data.Messages> messages = await this.apiClient.Channels.GetChannelMessagesAfterMessageId(Convert.ToInt32(s.Value.Key), monitoredChannelsLastMessageId[s.Value.Key]);
+                        IEnumerable<MednaNetAPIClient.Data.Messages> messages = await this.apiClient.Channels.GetChannelMessagesAfterMessageId(s.channelId, s.lastMessageId);
 
                         foreach (var message in messages.ToList())
                         {
                             if (message.code != botInstallKey)
                             {
-                                var ch = this.client.GetChannel(Convert.ToUInt64(s.Value.Value)) as ISocketMessageChannel;
-                                await ch.SendMessageAsync("(" + message.postedOn.ToString() + ") **" + message.name + "**: " + message.message);
+                                var ch = this.client.GetChannel(Convert.ToUInt64(s.discordChannelId)) as ISocketMessageChannel;
+                                await ch.SendMessageAsync("**" + message.name + "**: " + message.message);
 
-                                monitoredChannelsLastMessageId[s.Value.Key] = message.id;
+                                s.lastMessageId = message.id;
                             }
                         }
 
@@ -90,15 +85,19 @@ namespace MednaNet_Bridge
 
         private async void StartBot(object sender, EventArgs e)
         {
+            monitoredChannels.Add(new Data.MonitoredChannel()
+            {
+                channelName = "development",
+                channelId = 1,
+                discordChannelId = "335445676227952640",
+                lastMessageId = 0
+            });
+
             await startBot();
 
-            monitoredChannels.Add("development", new KeyValuePair<int, string>(1, "335445676227952640"));
-            monitoredChannelsLastMessageId.Add(1, 0);
-
-           // monitoredChannels.Add("development");
             this.apiClient = new MednaNetAPIClient.Client("localhost", "24215", this.botInstallKey);
 
-            Test();
+            SetupTimer();
         }
 
         private async Task startBot()
@@ -126,56 +125,22 @@ namespace MednaNet_Bridge
 
         private async Task MessageReceived(SocketMessage message)
         {
-            //message.Channel.Name
-
-            if (monitoredChannels.ContainsKey(message.Channel.Name))
+            if (monitoredChannels.Exists(x => x.channelName == message.Channel.Name))
             {
-                //IEnumerable<MednaNetAPIClient.Data.Messages> messages = await this.apiClient.Channels.GetChannelMessages(monitoredChannels[message.Channel.Name]);
-                this.apiClient.Channels.CreateMessage(monitoredChannels[message.Channel.Name].Key, new MednaNetAPIClient.Data.Messages()
+                var channel = monitoredChannels.Where(x => x.channelName == message.Channel.Name).FirstOrDefault();
+
+                if(channel != null)
                 {
-                    channel = monitoredChannels[message.Channel.Name].Key,
-                    code = this.botInstallKey,
-                    message = message.Content,
-                    name = message.Author.Username,
-                    postedOn = message.CreatedAt.LocalDateTime
-                });
-            }
-
-            if (message.Content == "!ping")
-            {
-                await message.Channel.SendMessageAsync("Pong!");
+                    this.apiClient.Channels.CreateMessage(channel.channelId, new MednaNetAPIClient.Data.Messages()
+                    {
+                        channel = channel.channelId,
+                        code = this.botInstallKey,
+                        message = message.Content,
+                        name = message.Author.Username,
+                        postedOn = message.CreatedAt.LocalDateTime
+                    });
+                }   
             }
         }
-
-        private async void button3_Click(object sender, EventArgs e)
-        {
-
-           /* MedLaunchEntities db = new MedLaunchEntities();
-            var currentId = 0;
-            while (true)
-            {
-                // code here
-
-
-
-
-                var result = from q in db.messages
-                             where q.id > currentId
-                             orderby q.id ascending
-                             select q;
-
-                foreach (var s in result)
-                {
-                    currentId = s.id;
-
-                    var ch = _client.GetChannel(335445676227952640) as ISocketMessageChannel;
-                    await ch.SendMessageAsync("<" + s.name + "> " + s.message1);
-                }
-
-                Thread.Sleep(5000);
-            }*/
-        }
-
-       
     }
 }
