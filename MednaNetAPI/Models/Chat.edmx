@@ -25,6 +25,15 @@
           <Property Name="channel" Type="int" Nullable="false" />
           <Property Name="clients_ignore" Type="bit" Nullable="false" />
         </EntityType>
+        <EntityType Name="discord_users">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="username" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="user_discord_id" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="is_online" Type="bit" Nullable="false" />
+        </EntityType>
         <EntityType Name="group_members">
           <Key>
             <PropertyRef Name="id" />
@@ -106,6 +115,7 @@
         <EntityContainer Name="MedLaunchModelStoreContainer">
           <EntitySet Name="discord_channels" EntityType="Self.discord_channels" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="discord_messages" EntityType="Self.discord_messages" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="discord_users" EntityType="Self.discord_users" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="group_members" EntityType="Self.group_members" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="groups" EntityType="Self.groups" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="installs" EntityType="Self.installs" Schema="dbo" store:Type="Tables" />
@@ -146,6 +156,7 @@
             <End Role="discord_messages" EntitySet="discord_messages" />
           </AssociationSet>
           <EntitySet Name="installs" EntityType="MedLaunchModel.install" />
+          <EntitySet Name="discord_users" EntityType="MedLaunchModel.discord_users" />
         </EntityContainer>
         <EntityType Name="group_members">
           <Key>
@@ -251,6 +262,15 @@
           <Property Name="last_checkin" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="username" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="false" />
         </EntityType>
+        <EntityType Name="discord_users">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="username" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="user_discord_id" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="is_online" Type="Boolean" Nullable="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -321,6 +341,16 @@
                 <ScalarProperty Name="banned" ColumnName="banned" />
                 <ScalarProperty Name="code" ColumnName="code" />
                 <ScalarProperty Name="registered_on" ColumnName="registered_on" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="discord_users">
+            <EntityTypeMapping TypeName="MedLaunchModel.discord_users">
+              <MappingFragment StoreEntitySet="discord_users">
+                <ScalarProperty Name="is_online" ColumnName="is_online" />
+                <ScalarProperty Name="user_discord_id" ColumnName="user_discord_id" />
+                <ScalarProperty Name="username" ColumnName="username" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>

@@ -182,6 +182,9 @@
     <Compile Include="Models\discord_messages.cs">
       <DependentUpon>Chat.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\discord_users.cs">
+      <DependentUpon>Chat.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\group.cs">
       <DependentUpon>Chat.tt</DependentUpon>
     </Compile>

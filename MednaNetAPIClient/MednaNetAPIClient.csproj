@@ -54,9 +54,11 @@
     <Compile Include="Data\Groups.cs" />
     <Compile Include="Data\Installs.cs" />
     <Compile Include="Data\Messages.cs" />
+    <Compile Include="Data\Users.cs" />
     <Compile Include="Groups\Groups.cs" />
     <Compile Include="Installs\Installs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Users\Users.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

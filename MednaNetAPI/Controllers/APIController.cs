@@ -70,6 +70,34 @@ namespace MednaNetAPI.Controllers
             return Ok(install);
         }
 
+
+        [Route("api/v1/users")]
+        [HttpGet]
+        public IHttpActionResult GetCheckedInUsers()
+        {
+            IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
+            string installKey = headerValues.FirstOrDefault();
+
+            List<MednaNetAPIClient.Data.Users> users = null;
+
+            if (installKey == "botInstallKey")
+            {
+                using (Models.MedLaunchChatEntities db = new Models.MedLaunchChatEntities())
+                {
+                    users = (from q in db.installs
+                                where q.last_checkin.AddMinutes(10) > DateTime.Now.AddMinutes(-10)
+                                select new MednaNetAPIClient.Data.Users()
+                                {
+                                    id = q.id,
+                                    username = q.username
+                                }).ToList();
+                }
+            }
+
+            return Ok(users);
+        }
+
+
         [Route("api/v1/installs/checkin")]
         [HttpGet]
         public IHttpActionResult CheckinInstall()
@@ -620,6 +648,47 @@ namespace MednaNetAPI.Controllers
             }
 
             return Ok(messages);
+        }
+
+
+        [Route("api/v1/discord/users")]
+        [HttpGet]
+        public IHttpActionResult GetOnlineUsers()
+        {
+            IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
+            string installKey = headerValues.FirstOrDefault();
+
+            List<MednaNetAPIClient.Data.Users> users = null;
+
+            if (installKey == "botInstallKey")
+            {
+                
+
+                using (Models.MedLaunchChatEntities db = new Models.MedLaunchChatEntities())
+                {
+                    var install = (from q in db.installs
+                                   where q.code == installKey
+                                   select q).FirstOrDefault();
+
+                    if (install != null)
+                    {
+
+                        users = (from q in db.discord_users
+                             where q.is_online == true
+                             
+                             select new MednaNetAPIClient.Data.Users()
+                             {
+                                discordId = q.user_discord_id,
+                                id = q.id,
+                                username = q.username
+                             }).ToList();
+                    }
+                }
+
+                
+            }
+
+            return Ok(users);
         }
     }
 }

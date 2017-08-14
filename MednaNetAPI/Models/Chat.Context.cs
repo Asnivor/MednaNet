@@ -31,5 +31,6 @@ namespace MednaNetAPI.Models
         public virtual DbSet<discord_channels> discord_channels { get; set; }
         public virtual DbSet<discord_messages> discord_messages { get; set; }
         public virtual DbSet<install> installs { get; set; }
+        public virtual DbSet<discord_users> discord_users { get; set; }
     }
 }
