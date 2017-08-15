@@ -76,7 +76,7 @@
             this.button1.TabIndex = 4;
             this.button1.Text = "Send Message";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.sendBotMessage);
+            this.button1.Click += new System.EventHandler(this.SendBotMessage);
             // 
             // button2
             // 

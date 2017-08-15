@@ -16,10 +16,15 @@ namespace MednaNetAPIClient.Users
             this.client = client;
         }
 
-        //public List<Data.Users> GetAllUsers()
-        //{
-//
-       // }
+        public async Task<List<Data.Users>> GetAllUsers()
+        {
+            List<Data.Users> allUsers = new List<Data.Users>();
+
+            allUsers.AddRange(await GetDiscordUsers());
+            allUsers.AddRange(await GetMedLaunchUsers());
+
+            return allUsers;
+        }
 
         public async Task<List<Data.Users>> GetDiscordUsers()
         {
@@ -37,9 +42,9 @@ namespace MednaNetAPIClient.Users
 
         public async Task<List<Data.Users>> GetMedLaunchUsers()
         {
-            HttpResponseMessage response = await client.GetAsync("api/v1/installs/checkedin");
+            HttpResponseMessage response = await client.GetAsync("api/v1/users");
 
-            List<Data.Installs> users = null;
+            List<Data.Users> users = null;
 
             if (response.IsSuccessStatusCode)
             {

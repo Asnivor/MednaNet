@@ -34,7 +34,7 @@ namespace MednaNet_Bridge
 
         private void T_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            getMessages();
+            GetMessages();
         }
 
         public Form1()
@@ -43,7 +43,24 @@ namespace MednaNet_Bridge
             
         }
 
-        private async void getMessages()
+
+        private async void GetUsers()
+        {
+
+            SocketGuild guild = client.GetGuild(334657816717688832);
+            await guild.DownloadUsersAsync();
+            var users = guild.Users;
+            
+            foreach(var user in users)
+            {
+               // user.Nickname;
+            }
+
+
+            //client.DownloadUsersAsync();
+        }
+
+        private async void GetMessages()
         {
             if (!this.isUpdating)
             {
@@ -125,7 +142,7 @@ namespace MednaNet_Bridge
             await this.client.StartAsync();
         }
 
-        private async void sendBotMessage(object sender, EventArgs e)
+        private async void SendBotMessage(object sender, EventArgs e)
         {
             var ch = this.client.GetChannel(335445676227952640) as ISocketMessageChannel;
             await ch.SendMessageAsync(botMessage.Text);

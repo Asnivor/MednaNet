@@ -653,7 +653,7 @@ namespace MednaNetAPI.Controllers
 
         [Route("api/v1/discord/users")]
         [HttpGet]
-        public IHttpActionResult GetOnlineUsers()
+        public IHttpActionResult GetOnlineUsers(List<MednaNetAPIClient.Data.Users> users)
         {
             IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
             string installKey = headerValues.FirstOrDefault();
@@ -666,6 +666,87 @@ namespace MednaNetAPI.Controllers
 
                 using (Models.MedLaunchChatEntities db = new Models.MedLaunchChatEntities())
                 {
+                    var allUsers = (from q in db.discord_users
+                                   select q).ToList();
+
+                    foreach(var user in users)
+                    {
+                        //bool userFound
+
+                        foreach(var u in allUsers)
+                        {
+                            if(user.discordId == user.discordId)
+                            {
+
+                            }
+                        }
+                    }
+
+
+                    //Set all current users as online
+                    foreach(var user in users)
+                    {
+                        var userResult = (from q in db.discord_users
+                                      where q.user_discord_id == user.discordId
+                                      select q).FirstOrDefault();
+
+                        userResult.is_online = true;
+                    }
+
+
+                    //Get all users from DB
+
+
+                    //Where they aren't in the passed list set them as offline
+                
+
+                    var result = (from q in db.discord_users
+                                 where q.user_discord_id == user.discordId
+                                 select q).FirstOrDefault();
+
+                    if(result == null)
+                    {
+                        var = new Models.message();
+
+                        newRecord.code = message.code;
+                        newRecord.message1 = message.message;
+                        newRecord.name = install.username;
+                        newRecord.posted_on = DateTime.Now;
+                        newRecord.channel = id;
+
+                        db.messages.Add(newRecord);
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        result.is
+                    }
+
+                   
+
+                }
+
+                
+            }
+
+            return Ok(users);
+        }
+
+        [Route("api/v1/discord/users")]
+        [HttpGet]
+        public IHttpActionResult AddDiscordUser()
+        {
+            IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
+            string installKey = headerValues.FirstOrDefault();
+
+            List<MednaNetAPIClient.Data.Users> users = null;
+
+            if (installKey == "botInstallKey")
+            {
+
+
+                using (Models.MedLaunchChatEntities db = new Models.MedLaunchChatEntities())
+                {
                     var install = (from q in db.installs
                                    where q.code == installKey
                                    select q).FirstOrDefault();
@@ -674,18 +755,18 @@ namespace MednaNetAPI.Controllers
                     {
 
                         users = (from q in db.discord_users
-                             where q.is_online == true
-                             
-                             select new MednaNetAPIClient.Data.Users()
-                             {
-                                discordId = q.user_discord_id,
-                                id = q.id,
-                                username = q.username
-                             }).ToList();
+                                 where q.is_online == true
+
+                                 select new MednaNetAPIClient.Data.Users()
+                                 {
+                                     discordId = q.user_discord_id,
+                                     id = q.id,
+                                     username = q.username
+                                 }).ToList();
                     }
                 }
 
-                
+
             }
 
             return Ok(users);
