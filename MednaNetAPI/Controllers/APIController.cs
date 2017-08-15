@@ -658,78 +658,30 @@ namespace MednaNetAPI.Controllers
             IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
             string installKey = headerValues.FirstOrDefault();
 
-            List<MednaNetAPIClient.Data.Users> users = null;
+            
 
             if (installKey == "botInstallKey")
             {
-                
-
                 using (Models.MedLaunchChatEntities db = new Models.MedLaunchChatEntities())
                 {
-                    var allUsers = (from q in db.discord_users
-                                   select q).ToList();
+                    //Delete all users in table
+                    db.Database.ExecuteSqlCommand("TRUNCATE TABLE [discord_users]");
 
                     foreach(var user in users)
                     {
-                        //bool userFound
+                        var u = new Models.discord_users();
 
-                        foreach(var u in allUsers)
-                        {
-                            if(user.discordId == user.discordId)
-                            {
+                        u.is_online = true;
+                        u.username = user.username;
+                        u.user_discord_id = user.discordId;
 
-                            }
-                        }
-                    }
-
-
-                    //Set all current users as online
-                    foreach(var user in users)
-                    {
-                        var userResult = (from q in db.discord_users
-                                      where q.user_discord_id == user.discordId
-                                      select q).FirstOrDefault();
-
-                        userResult.is_online = true;
-                    }
-
-
-                    //Get all users from DB
-
-
-                    //Where they aren't in the passed list set them as offline
-                
-
-                    var result = (from q in db.discord_users
-                                 where q.user_discord_id == user.discordId
-                                 select q).FirstOrDefault();
-
-                    if(result == null)
-                    {
-                        var = new Models.message();
-
-                        newRecord.code = message.code;
-                        newRecord.message1 = message.message;
-                        newRecord.name = install.username;
-                        newRecord.posted_on = DateTime.Now;
-                        newRecord.channel = id;
-
-                        db.messages.Add(newRecord);
+                        db.discord_users.Add(u);
                         db.SaveChanges();
                     }
-                    else
-                    {
-                        result.is
-                    }
-
-                   
-
                 }
-
-                
             }
 
-            return Ok(users);
+            return Ok();
         }
 
         [Route("api/v1/discord/users")]
