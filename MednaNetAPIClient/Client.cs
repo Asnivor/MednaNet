@@ -18,6 +18,7 @@ namespace MednaNetAPIClient
         private Groups.Groups groups = null;
         private Installs.Installs install = null;
         private Channels.Channels channels = null;
+        private Users.Users users = null;
 
 
         public Groups.Groups Group
@@ -44,6 +45,14 @@ namespace MednaNetAPIClient
             }
         }
 
+        public Users.Users Users
+        {
+            get
+            {
+                return this.users;
+            }
+        }
+
         public Client(string apiHostname, string apiPort, string installKey)
         {
             url = apiHostname.Replace("http://", "").Replace("https://", "");
@@ -57,6 +66,7 @@ namespace MednaNetAPIClient
             this.install = new Installs.Installs(this.client);
             this.groups = new Groups.Groups(this.client);
             this.channels = new Channels.Channels(this.client);
+            this.users = new Users.Users(this.client);
         }
     }
 }

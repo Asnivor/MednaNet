@@ -652,7 +652,7 @@ namespace MednaNetAPI.Controllers
 
 
         [Route("api/v1/discord/users")]
-        [HttpGet]
+        [HttpPost]
         public IHttpActionResult GetOnlineUsers(List<MednaNetAPIClient.Data.Users> users)
         {
             IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
@@ -671,7 +671,7 @@ namespace MednaNetAPI.Controllers
                     {
                         var u = new Models.discord_users();
 
-                        u.is_online = true;
+                        u.is_online = user.isOnline;
                         u.username = user.username;
                         u.user_discord_id = user.discordId;
 

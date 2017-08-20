@@ -11,5 +11,6 @@ namespace MednaNetAPIClient.Data
         public string username { get; set; }
         public int id { get; set; }
         public string discordId { get; set; }
+        public bool isOnline { get; set; }
     }
 }

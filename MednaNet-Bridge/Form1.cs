@@ -22,7 +22,8 @@ namespace MednaNet_Bridge
         private DateTime lastMessageUpdateFrom = DateTime.Now;
         private bool isUpdating = false;
         private bool isFirst = true;
-        
+
+        private int getUserCount = 0;
 
         public void SetupTimer()
         {
@@ -35,6 +36,16 @@ namespace MednaNet_Bridge
         private void T_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
             GetMessages();
+
+            if(getUserCount == 3)
+            {
+                getUserCount = 0;
+                GetUsers();
+            }
+            else
+            {
+                getUserCount += 1;        
+            }
         }
 
         public Form1()
@@ -50,11 +61,32 @@ namespace MednaNet_Bridge
             SocketGuild guild = client.GetGuild(334657816717688832);
             await guild.DownloadUsersAsync();
             var users = guild.Users;
+
+            List<MednaNetAPIClient.Data.Users> userList = new List<MednaNetAPIClient.Data.Users>();
             
             foreach(var user in users)
             {
-               // user.Nickname;
+
+                bool temp = false;
+
+                if(user.Status != UserStatus.Offline)
+                {
+                    temp = true;
+                }
+
+                // user.Nickname;
+                userList.Add(new MednaNetAPIClient.Data.Users()
+                {
+                    discordId = user.Id.ToString(),
+                    username = user.Username,
+                    isOnline = temp
+
+                });
+
+                
             }
+
+            await apiClient.Users.AddDiscordUsers(userList);
 
 
             //client.DownloadUsersAsync();
