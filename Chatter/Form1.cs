@@ -17,16 +17,18 @@ namespace Chatter
         private Dictionary<int, int> lastChannelMessageId = new Dictionary<int, int>();
         private int currentChannel = 0;
         private MednaNetAPIClient.Data.Installs currentInstall = null;
+        private int userQueryCount = 3;
+        System.Timers.Timer t = null;
 
         public Form1()
         {
             InitializeComponent();
 
-            System.Timers.Timer t = new System.Timers.Timer(5000);
+            t = new System.Timers.Timer(5000);
             t.SynchronizingObject = this; 
             t.AutoReset = true;
             t.Elapsed += T_Elapsed; ;
-            t.Start();
+            
         }
 
         private void T_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
@@ -34,6 +36,16 @@ namespace Chatter
             if(this.currentChannel != 0)
             {
                 displayMessages(this.currentChannel);
+            }
+
+            if(userQueryCount == 3)
+            {
+                userQueryCount = 0;
+                displayUsers();
+            }
+            else
+            {
+                userQueryCount++;
             }
         }
 
@@ -61,6 +73,8 @@ namespace Chatter
             TreeNode treeNode = new TreeNode("Channels", nodes.ToArray());
             treeView1.Nodes.Add(treeNode);
             treeView1.NodeMouseClick += loadMessages;
+
+            t.Start();
         }
 
         private void loadMessages(object sender, TreeNodeMouseClickEventArgs e)
@@ -108,6 +122,26 @@ namespace Chatter
 
                 }
             }
+        }
+
+        private async void displayUsers()
+        {
+            List<MednaNetAPIClient.Data.Users> userList = await client.Users.GetAllUsers();
+
+            userListTV.Nodes.Clear();
+
+            List<TreeNode> users = new List<TreeNode>();
+
+            foreach(var user in userList)
+            {
+                var tempNode = new TreeNode(user.username);
+                tempNode.Tag = user.userId;
+                users.Add(tempNode);
+            }
+
+            TreeNode treeNode = new TreeNode("Users", users.ToArray());
+            userListTV.Nodes.Add(treeNode);
+            userListTV.ExpandAll();
         }
 
         private async void button2_Click(object sender, EventArgs e)

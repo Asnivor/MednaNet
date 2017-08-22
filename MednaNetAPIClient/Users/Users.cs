@@ -20,8 +20,20 @@ namespace MednaNetAPIClient.Users
         {
             List<Data.Users> allUsers = new List<Data.Users>();
 
-            allUsers.AddRange(await GetDiscordUsers());
-            allUsers.AddRange(await GetMedLaunchUsers());
+            var discordUsers = await GetDiscordUsers();
+            var medLaunchUsers = await GetMedLaunchUsers();
+
+            if (discordUsers != null)
+            {
+                allUsers.AddRange(discordUsers);
+            }
+
+            if (medLaunchUsers != null)
+            {
+                allUsers.AddRange(medLaunchUsers);
+            }
+
+            
 
             return allUsers;
         }

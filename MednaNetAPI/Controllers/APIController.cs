@@ -9,6 +9,8 @@ using System.Web.Http;
 namespace MednaNetAPI.Controllers
 {
 
+    
+
     public class APIController : ApiController
     {
         //http://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api#restful
@@ -102,8 +104,11 @@ namespace MednaNetAPI.Controllers
         [HttpGet]
         public IHttpActionResult CheckinInstall()
         {
+            
+
             IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
             string installKey = headerValues.FirstOrDefault();
+            Models.Installs.checkinInstall(installKey);
 
             using (Models.MedLaunchChatEntities db = new Models.MedLaunchChatEntities())
             {
@@ -126,6 +131,7 @@ namespace MednaNetAPI.Controllers
         {
             IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
             string installKey = headerValues.FirstOrDefault();
+            Models.Installs.checkinInstall(installKey);
 
             List<MednaNetAPIClient.Data.Groups> groups = null;
 
@@ -160,6 +166,7 @@ namespace MednaNetAPI.Controllers
 
             IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
             string installKey = headerValues.FirstOrDefault();
+            Models.Installs.checkinInstall(installKey);
 
 
             using (Models.MedLaunchChatEntities db = new Models.MedLaunchChatEntities())
@@ -226,6 +233,7 @@ namespace MednaNetAPI.Controllers
         {
             IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
             string installKey = headerValues.FirstOrDefault();
+            Models.Installs.checkinInstall(installKey);
 
             MednaNetAPIClient.Data.Groups group = null;
 
@@ -259,6 +267,7 @@ namespace MednaNetAPI.Controllers
         {
             IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
             string installKey = headerValues.FirstOrDefault();
+            Models.Installs.checkinInstall(installKey);
 
             var APIReturn = new Models.APIReturn();
             APIReturn.returnMessage = "something";
@@ -314,6 +323,7 @@ namespace MednaNetAPI.Controllers
         {
             IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
             string installKey = headerValues.FirstOrDefault();
+            Models.Installs.checkinInstall(installKey);
 
             List<MednaNetAPIClient.Data.Messages> messages = null;
 
@@ -354,6 +364,7 @@ namespace MednaNetAPI.Controllers
         {
             IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
             string installKey = headerValues.FirstOrDefault();
+            Models.Installs.checkinInstall(installKey);
 
             DateTime fromDate = DateTime.ParseExact(from, "yyyyMMddTHHmmss", System.Globalization.CultureInfo.InvariantCulture).ToLocalTime();
 
@@ -397,6 +408,7 @@ namespace MednaNetAPI.Controllers
         {
             IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
             string installKey = headerValues.FirstOrDefault();
+            Models.Installs.checkinInstall(installKey);
 
             List<MednaNetAPIClient.Data.Channels> channels = null;
 
@@ -419,6 +431,7 @@ namespace MednaNetAPI.Controllers
         {
             IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
             string installKey = headerValues.FirstOrDefault();
+            Models.Installs.checkinInstall(installKey);
 
             MednaNetAPIClient.Data.Channels channel = null;
 
@@ -442,6 +455,7 @@ namespace MednaNetAPI.Controllers
         {
             IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
             string installKey = headerValues.FirstOrDefault();
+            Models.Installs.checkinInstall(installKey);
 
             List<MednaNetAPIClient.Data.Messages> messages = null;
 
@@ -469,6 +483,7 @@ namespace MednaNetAPI.Controllers
         {
             IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
             string installKey = headerValues.FirstOrDefault();
+            Models.Installs.checkinInstall(installKey);
 
             string username = "";
             bool clientIgnore = false;
@@ -537,8 +552,9 @@ namespace MednaNetAPI.Controllers
         {
             IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
             string installKey = headerValues.FirstOrDefault();
+            Models.Installs.checkinInstall(installKey);
 
-            
+
 
             MednaNetAPIClient.Data.Messages message = null;
 
@@ -577,6 +593,7 @@ namespace MednaNetAPI.Controllers
         {
             IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
             string installKey = headerValues.FirstOrDefault();
+            Models.Installs.checkinInstall(installKey);
 
             DateTime fromDate = DateTime.ParseExact(from, "yyyyMMddTHHmmss", System.Globalization.CultureInfo.InvariantCulture).ToLocalTime();
 
@@ -618,6 +635,7 @@ namespace MednaNetAPI.Controllers
         {
             IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
             string installKey = headerValues.FirstOrDefault();
+            Models.Installs.checkinInstall(installKey);
 
             List<MednaNetAPIClient.Data.Messages> messages = null;
 
@@ -653,12 +671,13 @@ namespace MednaNetAPI.Controllers
 
         [Route("api/v1/discord/users")]
         [HttpPost]
-        public IHttpActionResult GetOnlineUsers(List<MednaNetAPIClient.Data.Users> users)
+        public IHttpActionResult AddDiscordUser(List<MednaNetAPIClient.Data.Users> users)
         {
             IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
             string installKey = headerValues.FirstOrDefault();
+            Models.Installs.checkinInstall(installKey);
 
-            
+
 
             if (installKey == "botInstallKey")
             {
@@ -686,40 +705,38 @@ namespace MednaNetAPI.Controllers
 
         [Route("api/v1/discord/users")]
         [HttpGet]
-        public IHttpActionResult AddDiscordUser()
+        public IHttpActionResult GetOnlineUsers()
         {
             IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
             string installKey = headerValues.FirstOrDefault();
+            Models.Installs.checkinInstall(installKey);
 
             List<MednaNetAPIClient.Data.Users> users = null;
 
-            if (installKey == "botInstallKey")
+            
+            using (Models.MedLaunchChatEntities db = new Models.MedLaunchChatEntities())
             {
+                var install = (from q in db.installs
+                                where q.code == installKey
+                                select q).FirstOrDefault();
 
-
-                using (Models.MedLaunchChatEntities db = new Models.MedLaunchChatEntities())
+                if (install != null)
                 {
-                    var install = (from q in db.installs
-                                   where q.code == installKey
-                                   select q).FirstOrDefault();
 
-                    if (install != null)
-                    {
+                    users = (from q in db.discord_users
+                                where q.is_online == true
 
-                        users = (from q in db.discord_users
-                                 where q.is_online == true
-
-                                 select new MednaNetAPIClient.Data.Users()
-                                 {
-                                     discordId = q.user_discord_id,
-                                     id = q.id,
-                                     username = q.username
-                                 }).ToList();
-                    }
+                                select new MednaNetAPIClient.Data.Users()
+                                {
+                                    discordId = q.user_discord_id,
+                                    id = q.id,
+                                    username = q.username
+                                }).ToList();
                 }
-
-
             }
+
+
+         
 
             return Ok(users);
         }

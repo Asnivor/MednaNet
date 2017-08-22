@@ -194,6 +194,7 @@
     <Compile Include="Models\install.cs">
       <DependentUpon>Chat.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Installs.cs" />
     <Compile Include="Models\message.cs">
       <DependentUpon>Chat.tt</DependentUpon>
     </Compile>

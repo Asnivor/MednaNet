@@ -37,6 +37,8 @@
             this.label3 = new System.Windows.Forms.Label();
             this.treeView1 = new System.Windows.Forms.TreeView();
             this.label2 = new System.Windows.Forms.Label();
+            this.userListTV = new System.Windows.Forms.TreeView();
+            this.label4 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // button1
@@ -72,7 +74,7 @@
             this.messageBox.Multiline = true;
             this.messageBox.Name = "messageBox";
             this.messageBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.messageBox.Size = new System.Drawing.Size(469, 414);
+            this.messageBox.Size = new System.Drawing.Size(385, 414);
             this.messageBox.TabIndex = 4;
             // 
             // message
@@ -117,11 +119,29 @@
             this.label2.TabIndex = 10;
             this.label2.Text = "Channels";
             // 
+            // userListTV
+            // 
+            this.userListTV.Location = new System.Drawing.Point(627, 51);
+            this.userListTV.Name = "userListTV";
+            this.userListTV.Size = new System.Drawing.Size(164, 398);
+            this.userListTV.TabIndex = 11;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(628, 35);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(34, 13);
+            this.label4.TabIndex = 12;
+            this.label4.Text = "Users";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(717, 461);
+            this.ClientSize = new System.Drawing.Size(803, 461);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.userListTV);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.button2);
@@ -149,6 +169,8 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TreeView treeView1;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TreeView userListTV;
+        private System.Windows.Forms.Label label4;
     }
 }
 
