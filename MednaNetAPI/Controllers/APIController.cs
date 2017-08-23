@@ -82,19 +82,18 @@ namespace MednaNetAPI.Controllers
 
             List<MednaNetAPIClient.Data.Users> users = null;
 
-            if (installKey == "botInstallKey")
+            
+            using (Models.MedLaunchChatEntities db = new Models.MedLaunchChatEntities())
             {
-                using (Models.MedLaunchChatEntities db = new Models.MedLaunchChatEntities())
-                {
-                    users = (from q in db.installs
-                                where q.last_checkin.AddMinutes(10) > DateTime.Now.AddMinutes(-10)
-                                select new MednaNetAPIClient.Data.Users()
-                                {
-                                    id = q.id,
-                                    username = q.username
-                                }).ToList();
-                }
+                users = (from q in db.installs
+                            where System.Data.Entity.DbFunctions.AddMinutes(q.last_checkin, 10) > System.Data.Entity.DbFunctions.AddMinutes(DateTime.Now, -10) && q.code != "botInstallKey"
+                            select new MednaNetAPIClient.Data.Users()
+                            {
+                                id = q.id,
+                                username = q.username
+                            }).ToList();
             }
+          
 
             return Ok(users);
         }
@@ -570,7 +569,7 @@ namespace MednaNetAPI.Controllers
                     message =
                         (from g in db.discord_channels
                          from m in g.discord_messages
-                         where !m.clients_ignore
+                         where !m.clients_ignore && m.channel == id
                          orderby m.id descending
                          select new MednaNetAPIClient.Data.Messages()
                          {
@@ -611,7 +610,7 @@ namespace MednaNetAPI.Controllers
                     messages =
                         (from g in db.discord_channels
                          from m in g.discord_messages
-                         where m.posted_on > fromDate && !m.clients_ignore
+                         where m.posted_on > fromDate && !m.clients_ignore && m.channel == id
                          orderby m.posted_on
                          select new MednaNetAPIClient.Data.Messages()
                          {
@@ -651,7 +650,7 @@ namespace MednaNetAPI.Controllers
                     messages =
                         (from g in db.discord_channels
                          from m in g.discord_messages
-                         where m.id > messageId && !m.clients_ignore
+                         where m.id > messageId && !m.clients_ignore && m.channel == id
                          orderby m.posted_on
                          select new MednaNetAPIClient.Data.Messages()
                          {

@@ -81,8 +81,9 @@ namespace Chatter
         {
            if(e.Node.Tag != null)
             {
-                currentChannel = (int)e.Node.Tag;
-                messageBox.Text = "Loading...";
+                this.currentChannel = (int)e.Node.Tag;
+                messageBox.Text = "";
+                displayMessages(this.currentChannel);
             }
         }
 
@@ -90,16 +91,43 @@ namespace Chatter
         {
             if (lastChannelMessageId.ContainsKey(channelId))
             {
-                IEnumerable<MednaNetAPIClient.Data.Messages> messages = await client.Channels.GetChannelMessagesAfterMessageId(channelId, lastChannelMessageId[channelId]);
 
-                foreach (var message in messages)
+                if(messageBox.Text == "")
                 {
-                    messageBox.AppendText(message.name + " @ " + message.postedOn.ToString() + System.Environment.NewLine);
-                    messageBox.AppendText(message.message + System.Environment.NewLine);
-                    messageBox.AppendText(System.Environment.NewLine);
+                    IEnumerable<MednaNetAPIClient.Data.Messages> messages = await client.Channels.GetChannelMessages(channelId);
 
-                    lastChannelMessageId[channelId] = message.id;
+                    foreach (var message in messages)
+                    {
+                        messageBox.AppendText(message.name + " @ " + message.postedOn.ToString() + System.Environment.NewLine);
+                        messageBox.AppendText(message.message + System.Environment.NewLine);
+                        messageBox.AppendText(System.Environment.NewLine);
+
+                        if (lastChannelMessageId.ContainsKey(channelId))
+                        {
+                            lastChannelMessageId[channelId] = message.id;
+                        }
+                        else
+                        {
+                            lastChannelMessageId.Add(channelId, message.id);
+                        }
+
+                    }
                 }
+                else
+                {
+                    IEnumerable<MednaNetAPIClient.Data.Messages> messages = await client.Channels.GetChannelMessagesAfterMessageId(channelId, lastChannelMessageId[channelId]);
+
+                    foreach (var message in messages)
+                    {
+                        messageBox.AppendText(message.name + " @ " + message.postedOn.ToString() + System.Environment.NewLine);
+                        messageBox.AppendText(message.message + System.Environment.NewLine);
+                        messageBox.AppendText(System.Environment.NewLine);
+
+                        lastChannelMessageId[channelId] = message.id;
+                    }
+                }
+
+                
             }
             else
             {
