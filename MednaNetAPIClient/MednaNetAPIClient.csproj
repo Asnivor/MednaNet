@@ -49,7 +49,6 @@
   <ItemGroup>
     <Compile Include="Channels\Channels.cs" />
     <Compile Include="Client.cs" />
-    <Compile Include="ClientTest.cs" />
     <Compile Include="Data\Channels.cs" />
     <Compile Include="Data\Groups.cs" />
     <Compile Include="Data\Installs.cs" />

@@ -25,6 +25,8 @@ namespace MednaNetAPI.Controllers
         {
             string guid = Guid.NewGuid().ToString();
 
+            MednaNetAPIClient.Data.Installs install = null;
+
             using (Models.MedLaunchChatEntities db = new Models.MedLaunchChatEntities())
             {
                 Models.install newInstall = new Models.install();
@@ -36,9 +38,23 @@ namespace MednaNetAPI.Controllers
 
                 db.installs.Add(newInstall);
                 db.SaveChanges();
+
+                install = (from q in db.installs
+                           where q.code == guid
+                           select new MednaNetAPIClient.Data.Installs()
+                           {
+                               id = q.id,
+                               banned = q.banned,
+                               code = q.code,
+                               lastCheckin = q.last_checkin,
+                               registeredOn = q.registered_on,
+                               tempBan = q.temp_ban,
+                               tempBanEnd = q.temp_ban_end,
+                               username = q.username
+                           }).FirstOrDefault();
             }
 
-            return Ok(guid);
+            return Ok(install);
         }
 
        

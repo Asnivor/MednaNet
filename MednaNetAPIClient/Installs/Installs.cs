@@ -18,32 +18,11 @@ namespace MednaNetAPIClient.Installs
         }
         
         /// <summary>
-        /// Will register a new install with the web service and return its Install Key.
+        /// Creates a new install and registers it with MednaNet. 
         /// </summary>
-        /// <returns></returns>
-        public async Task<string> CreateNewInstall()
+        public async Task<Data.Installs> CreateNewInstall()
         {
             HttpResponseMessage response = await client.PostAsJsonAsync("api/v1/installs", "");
-            string installKey = "";
-
-            if (response.IsSuccessStatusCode)
-            {
-                installKey = await response.Content.ReadAsAsync<string>();
-            }
-
-            return installKey;
-        }
-
-        /// <summary>
-        /// Returns current install.
-        /// </summary>
-        /// <param name="queryServer">If set to false the cached install will be returned. If set to true then the web service will be queried for 
-        /// the most up to date install information.</param>
-        /// <returns></returns>
-        public async Task<Data.Installs> GetCurrentInstall()
-        {
-            
-            HttpResponseMessage response = await client.GetAsync("api/v1/installs");
             Data.Installs install = null;
 
             if (response.IsSuccessStatusCode)
@@ -54,9 +33,27 @@ namespace MednaNetAPIClient.Installs
             return install;
         }
 
-        public async void CheckinInstall()
+        /// <summary>
+        /// Returns an Install specified by installKey. If the install key is passed as a blank string a new install will be created. 
+        /// </summary>
+        public async Task<Data.Installs> GetCurrentInstall(string installKey)
         {
-            HttpResponseMessage response = await client.GetAsync("api/v1/installs/checkin");
+            if(installKey == "")
+            {
+                return await CreateNewInstall();
+            }
+            else
+            {
+                HttpResponseMessage response = await client.GetAsync("api/v1/installs");
+                Data.Installs install = null;
+
+                if (response.IsSuccessStatusCode)
+                {
+                    install = await response.Content.ReadAsAsync<Data.Installs>();
+                }
+
+                return install;
+            }
         }
     }
 }
