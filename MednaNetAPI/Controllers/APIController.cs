@@ -57,7 +57,27 @@ namespace MednaNetAPI.Controllers
             return Ok(install);
         }
 
-       
+        [Route("api/v1/installs")]
+        [HttpPut]
+        public IHttpActionResult UpdateInstall(MednaNetAPIClient.Data.Installs install)
+        {
+            IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
+            string installKey = headerValues.FirstOrDefault();
+            Models.Installs.checkinInstall(installKey);
+
+            using (Models.MedLaunchChatEntities db = new Models.MedLaunchChatEntities())
+            {
+                var dbInstall = (from q in db.installs
+                               where q.code == installKey
+                               select q).FirstOrDefault();
+
+                dbInstall.username = install.username;
+
+                db.SaveChanges();
+            }
+
+            return Ok();
+        }
 
         [Route("api/v1/installs")]
         [HttpGet]
@@ -626,7 +646,7 @@ namespace MednaNetAPI.Controllers
                     messages =
                         (from g in db.discord_channels
                          from m in g.discord_messages
-                         where m.posted_on > fromDate && !m.clients_ignore && m.channel == id
+                         where m.posted_on >= fromDate && !m.clients_ignore && m.channel == id
                          orderby m.posted_on
                          select new MednaNetAPIClient.Data.Messages()
                          {

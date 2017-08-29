@@ -55,5 +55,26 @@ namespace MednaNetAPIClient.Installs
                 return install;
             }
         }
+
+        /// <summary>
+        /// Updates the username for the install. Currently only username can be updated, all other values will be ignored.
+        /// </summary>
+        /// <param name="install"></param>
+        /// <returns></returns>
+        public async Task<bool> UpdateUsername(Data.Installs install)
+        {
+            HttpResponseMessage response = await client.PutAsJsonAsync("api/v1/installs", install);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+            
+        }
     }
 }
