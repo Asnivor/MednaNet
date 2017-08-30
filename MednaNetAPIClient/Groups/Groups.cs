@@ -22,8 +22,6 @@ namespace MednaNetAPIClient.Groups
         /// <summary>
         /// Returns a list of Groups associated with install.
         /// </summary>
-        /// <param name="queryServer">If set to false the cached group list will be returned. If set to true then the web service will be queried for 
-        /// the most up to date group list.</param>
         /// <returns></returns>
         public async Task<IEnumerable<Models.Groups>> GetGroups()
         {
@@ -38,6 +36,11 @@ namespace MednaNetAPIClient.Groups
             return groups;
         }
 
+        /// <summary>
+        /// Returns Group specified by the group id.
+        /// </summary>
+        /// <param name="groupId"></param>
+        /// <returns></returns>
         public async Task<Models.Groups> GetGroupById(int groupId)
         {
             Models.Groups group = null;
@@ -64,6 +67,11 @@ namespace MednaNetAPIClient.Groups
             return response.Headers.Location;
         }
 
+        /// <summary>
+        /// Returns a list of all message for the specified group. It is unlikely you will need to use this. Use GetGroupMessagesFrom instead.
+        /// </summary>
+        /// <param name="groupId"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<Models.Messages>> GetGroupMessages(int groupId)
         {
             HttpResponseMessage response = await client.GetAsync("api/v1/groups/" + groupId.ToString() + "/messages");
@@ -77,6 +85,12 @@ namespace MednaNetAPIClient.Groups
             return messages;
         }
 
+        /// <summary>
+        /// Returns a list of group messages for a specific group from a point in time.
+        /// </summary>
+        /// <param name="groupId"></param>
+        /// <param name="from"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<Models.Messages>> GetGroupMessagesFrom(int groupId, DateTime from)
         {
             string urlSafeDateString = from.ToUniversalTime().ToString("yyyyMMddTHHmmss", System.Globalization.CultureInfo.InvariantCulture);

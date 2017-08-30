@@ -34,7 +34,7 @@ namespace MednaNetAPIClient.Channels
         }
 
         /// <summary>
-        /// Returns Discord Channel specified by the channel id. .
+        /// Returns Discord Channel specified by the channel id.
         /// </summary>
         /// <param name="channelId">This is not the Discord Channel ID, it is the unique ID for the channel in the MednaNetAPI.</param>
         /// <returns></returns>
