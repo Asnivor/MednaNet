@@ -25,7 +25,7 @@ namespace MednaNetAPI.Controllers
         {
             string guid = Guid.NewGuid().ToString();
 
-            MednaNetAPIClient.Data.Installs install = null;
+            MednaNetAPIClient.Models.Installs install = null;
 
             using (Models.MedLaunchChatEntities db = new Models.MedLaunchChatEntities())
             {
@@ -41,7 +41,7 @@ namespace MednaNetAPI.Controllers
 
                 install = (from q in db.installs
                            where q.code == guid
-                           select new MednaNetAPIClient.Data.Installs()
+                           select new MednaNetAPIClient.Models.Installs()
                            {
                                id = q.id,
                                banned = q.banned,
@@ -59,7 +59,7 @@ namespace MednaNetAPI.Controllers
 
         [Route("api/v1/installs")]
         [HttpPut]
-        public IHttpActionResult UpdateInstall(MednaNetAPIClient.Data.Installs install)
+        public IHttpActionResult UpdateInstall(MednaNetAPIClient.Models.Installs install)
         {
             IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
             string installKey = headerValues.FirstOrDefault();
@@ -86,13 +86,13 @@ namespace MednaNetAPI.Controllers
             IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
             string installKey = headerValues.FirstOrDefault();
 
-            MednaNetAPIClient.Data.Installs install = null;
+            MednaNetAPIClient.Models.Installs install = null;
 
             using (Models.MedLaunchChatEntities db = new Models.MedLaunchChatEntities())
             {
                 install = (from q in db.installs
                            where q.code == installKey
-                           select new MednaNetAPIClient.Data.Installs()
+                           select new MednaNetAPIClient.Models.Installs()
                            {
                                id = q.id,
                                banned = q.banned,
@@ -116,14 +116,14 @@ namespace MednaNetAPI.Controllers
             IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
             string installKey = headerValues.FirstOrDefault();
 
-            List<MednaNetAPIClient.Data.Users> users = null;
+            List<MednaNetAPIClient.Models.Users> users = null;
 
             
             using (Models.MedLaunchChatEntities db = new Models.MedLaunchChatEntities())
             {
                 users = (from q in db.installs
                             where System.Data.Entity.DbFunctions.AddMinutes(q.last_checkin, 10) > System.Data.Entity.DbFunctions.AddMinutes(DateTime.Now, -10) && q.code != "botInstallKey"
-                            select new MednaNetAPIClient.Data.Users()
+                            select new MednaNetAPIClient.Models.Users()
                             {
                                 id = q.id,
                                 username = q.username
@@ -168,7 +168,7 @@ namespace MednaNetAPI.Controllers
             string installKey = headerValues.FirstOrDefault();
             Models.Installs.checkinInstall(installKey);
 
-            List<MednaNetAPIClient.Data.Groups> groups = null;
+            List<MednaNetAPIClient.Models.Groups> groups = null;
 
             using (Models.MedLaunchChatEntities db = new Models.MedLaunchChatEntities())
             {
@@ -180,7 +180,7 @@ namespace MednaNetAPI.Controllers
                 {
                     groups = (from q in db.group_members
                               where q.install_id == install.id
-                              select new MednaNetAPIClient.Data.Groups()
+                              select new MednaNetAPIClient.Models.Groups()
                               {
                                   groupDescription = q.@group.group_description,
                                   groupName = q.@group.group_name,
@@ -195,7 +195,7 @@ namespace MednaNetAPI.Controllers
 
         [Route("api/v1/groups")]
         [HttpPost]
-        public IHttpActionResult CreateGroup(MednaNetAPIClient.Data.Groups group)
+        public IHttpActionResult CreateGroup(MednaNetAPIClient.Models.Groups group)
         {
             var APIReturn = new Models.APIReturn();
 
@@ -270,7 +270,7 @@ namespace MednaNetAPI.Controllers
             string installKey = headerValues.FirstOrDefault();
             Models.Installs.checkinInstall(installKey);
 
-            MednaNetAPIClient.Data.Groups group = null;
+            MednaNetAPIClient.Models.Groups group = null;
 
             using (Models.MedLaunchChatEntities db = new Models.MedLaunchChatEntities())
             {
@@ -282,7 +282,7 @@ namespace MednaNetAPI.Controllers
                 {
                     group = (from q in db.groups
                              where q.id == id
-                             select new MednaNetAPIClient.Data.Groups()
+                             select new MednaNetAPIClient.Models.Groups()
                              {
                                  groupDescription = q.group_description,
                                  groupName = q.group_name,
@@ -298,7 +298,7 @@ namespace MednaNetAPI.Controllers
 
         [Route("api/v1/groups/{id}/messages")]
         [HttpPost]
-        public IHttpActionResult CreateMessage(int id, MednaNetAPIClient.Data.Messages message)
+        public IHttpActionResult CreateMessage(int id, MednaNetAPIClient.Models.Messages message)
         {
             IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
             string installKey = headerValues.FirstOrDefault();
@@ -360,7 +360,7 @@ namespace MednaNetAPI.Controllers
             string installKey = headerValues.FirstOrDefault();
             Models.Installs.checkinInstall(installKey);
 
-            List<MednaNetAPIClient.Data.Messages> messages = null;
+            List<MednaNetAPIClient.Models.Messages> messages = null;
 
             using (Models.MedLaunchChatEntities db = new Models.MedLaunchChatEntities())
             {
@@ -379,7 +379,7 @@ namespace MednaNetAPI.Controllers
                         from m in g.messages
                         from gm in g.group_members
                         where gm.install_id == install.id && g.id == id
-                        select new MednaNetAPIClient.Data.Messages()
+                        select new MednaNetAPIClient.Models.Messages()
                         {
                             channel = g.id,
                             code = m.code,
@@ -403,7 +403,7 @@ namespace MednaNetAPI.Controllers
 
             DateTime fromDate = DateTime.ParseExact(from, "yyyyMMddTHHmmss", System.Globalization.CultureInfo.InvariantCulture).ToLocalTime();
 
-            List<MednaNetAPIClient.Data.Messages> messages = null;
+            List<MednaNetAPIClient.Models.Messages> messages = null;
 
             using (Models.MedLaunchChatEntities db = new Models.MedLaunchChatEntities())
             {
@@ -419,7 +419,7 @@ namespace MednaNetAPI.Controllers
                          from m in g.messages
                          from gm in g.group_members
                          where m.posted_on > fromDate && gm.install_id == install.id
-                         select new MednaNetAPIClient.Data.Messages()
+                         select new MednaNetAPIClient.Models.Messages()
                          {
                              channel = g.id,
                              code = m.code,
@@ -445,12 +445,12 @@ namespace MednaNetAPI.Controllers
             string installKey = headerValues.FirstOrDefault();
             Models.Installs.checkinInstall(installKey);
 
-            List<MednaNetAPIClient.Data.Channels> channels = null;
+            List<MednaNetAPIClient.Models.Channels> channels = null;
 
             using (Models.MedLaunchChatEntities db = new Models.MedLaunchChatEntities())
             {
                 channels =  (from q in db.discord_channels
-                               select new MednaNetAPIClient.Data.Channels()
+                               select new MednaNetAPIClient.Models.Channels()
                                {
                                    channelName = q.channel_name,
                                    id = q.id
@@ -468,13 +468,13 @@ namespace MednaNetAPI.Controllers
             string installKey = headerValues.FirstOrDefault();
             Models.Installs.checkinInstall(installKey);
 
-            MednaNetAPIClient.Data.Channels channel = null;
+            MednaNetAPIClient.Models.Channels channel = null;
 
             using (Models.MedLaunchChatEntities db = new Models.MedLaunchChatEntities())
             {
                 channel = (from q in db.discord_channels
                            where q.id == id
-                            select new MednaNetAPIClient.Data.Channels()
+                            select new MednaNetAPIClient.Models.Channels()
                             {
                                 channelName = q.channel_name,
                                 id = q.id
@@ -492,13 +492,13 @@ namespace MednaNetAPI.Controllers
             string installKey = headerValues.FirstOrDefault();
             Models.Installs.checkinInstall(installKey);
 
-            List<MednaNetAPIClient.Data.Messages> messages = null;
+            List<MednaNetAPIClient.Models.Messages> messages = null;
 
             using (Models.MedLaunchChatEntities db = new Models.MedLaunchChatEntities())
             {
                 messages = (from q in db.discord_messages
                             where q.channel == id && !q.clients_ignore
-                            select new MednaNetAPIClient.Data.Messages()
+                            select new MednaNetAPIClient.Models.Messages()
                             {
                                 channel = q.channel,
                                 code = q.code,
@@ -514,7 +514,7 @@ namespace MednaNetAPI.Controllers
 
         [Route("api/v1/discord/channels/{id}/messages")]
         [HttpPost]
-        public IHttpActionResult CreateDiscordMessage(int id, MednaNetAPIClient.Data.Messages message)
+        public IHttpActionResult CreateDiscordMessage(int id, MednaNetAPIClient.Models.Messages message)
         {
             IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
             string installKey = headerValues.FirstOrDefault();
@@ -591,7 +591,7 @@ namespace MednaNetAPI.Controllers
 
 
 
-            MednaNetAPIClient.Data.Messages message = null;
+            MednaNetAPIClient.Models.Messages message = null;
 
             using (Models.MedLaunchChatEntities db = new Models.MedLaunchChatEntities())
             {
@@ -607,7 +607,7 @@ namespace MednaNetAPI.Controllers
                          from m in g.discord_messages
                          where !m.clients_ignore && m.channel == id
                          orderby m.id descending
-                         select new MednaNetAPIClient.Data.Messages()
+                         select new MednaNetAPIClient.Models.Messages()
                          {
                              channel = g.id,
                              code = m.code,
@@ -632,7 +632,7 @@ namespace MednaNetAPI.Controllers
 
             DateTime fromDate = DateTime.ParseExact(from, "yyyyMMddTHHmmss", System.Globalization.CultureInfo.InvariantCulture).ToLocalTime();
 
-            List<MednaNetAPIClient.Data.Messages> messages = null;
+            List<MednaNetAPIClient.Models.Messages> messages = null;
 
             using (Models.MedLaunchChatEntities db = new Models.MedLaunchChatEntities())
             {
@@ -648,7 +648,7 @@ namespace MednaNetAPI.Controllers
                          from m in g.discord_messages
                          where m.posted_on >= fromDate && !m.clients_ignore && m.channel == id
                          orderby m.posted_on
-                         select new MednaNetAPIClient.Data.Messages()
+                         select new MednaNetAPIClient.Models.Messages()
                          {
                              channel = g.id,
                              code = m.code,
@@ -672,7 +672,7 @@ namespace MednaNetAPI.Controllers
             string installKey = headerValues.FirstOrDefault();
             Models.Installs.checkinInstall(installKey);
 
-            List<MednaNetAPIClient.Data.Messages> messages = null;
+            List<MednaNetAPIClient.Models.Messages> messages = null;
 
             using (Models.MedLaunchChatEntities db = new Models.MedLaunchChatEntities())
             {
@@ -688,7 +688,7 @@ namespace MednaNetAPI.Controllers
                          from m in g.discord_messages
                          where m.id > messageId && !m.clients_ignore && m.channel == id
                          orderby m.posted_on
-                         select new MednaNetAPIClient.Data.Messages()
+                         select new MednaNetAPIClient.Models.Messages()
                          {
                              channel = g.id,
                              code = m.code,
@@ -706,7 +706,7 @@ namespace MednaNetAPI.Controllers
 
         [Route("api/v1/discord/users")]
         [HttpPost]
-        public IHttpActionResult AddDiscordUser(List<MednaNetAPIClient.Data.Users> users)
+        public IHttpActionResult AddDiscordUser(List<MednaNetAPIClient.Models.Users> users)
         {
             IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
             string installKey = headerValues.FirstOrDefault();
@@ -746,7 +746,7 @@ namespace MednaNetAPI.Controllers
             string installKey = headerValues.FirstOrDefault();
             Models.Installs.checkinInstall(installKey);
 
-            List<MednaNetAPIClient.Data.Users> users = null;
+            List<MednaNetAPIClient.Models.Users> users = null;
 
             
             using (Models.MedLaunchChatEntities db = new Models.MedLaunchChatEntities())
@@ -761,7 +761,7 @@ namespace MednaNetAPI.Controllers
                     users = (from q in db.discord_users
                                 where q.is_online == true
 
-                                select new MednaNetAPIClient.Data.Users()
+                                select new MednaNetAPIClient.Models.Users()
                                 {
                                     discordId = q.user_discord_id,
                                     id = q.id,

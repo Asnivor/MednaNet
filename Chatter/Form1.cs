@@ -16,7 +16,7 @@ namespace Chatter
         MednaNetAPIClient.Client client;
         private Dictionary<int, int> lastChannelMessageId = new Dictionary<int, int>();
         private int currentChannel = 0;
-        private MednaNetAPIClient.Data.Installs currentInstall = null;
+        private MednaNetAPIClient.Models.Installs currentInstall = null;
         private int userQueryCount = 3;
         System.Timers.Timer t = null;
 
@@ -55,7 +55,7 @@ namespace Chatter
 
             currentInstall = await this.client.Install.GetCurrentInstall("562ad8ef-12c4-4596-ac58-f5021749541b");
 
-            IEnumerable<MednaNetAPIClient.Data.Channels> channels = await this.client.Channels.GetChannels();
+            IEnumerable<MednaNetAPIClient.Models.Channels> channels = await this.client.Channels.GetChannels();
 
             
 
@@ -94,7 +94,7 @@ namespace Chatter
 
                 if(messageBox.Text == "")
                 {
-                    IEnumerable<MednaNetAPIClient.Data.Messages> messages = await client.Channels.GetChannelMessages(channelId);
+                    IEnumerable<MednaNetAPIClient.Models.Messages> messages = await client.Channels.GetChannelMessages(channelId);
 
                     foreach (var message in messages)
                     {
@@ -115,7 +115,7 @@ namespace Chatter
                 }
                 else
                 {
-                    IEnumerable<MednaNetAPIClient.Data.Messages> messages = await client.Channels.GetChannelMessagesAfterMessageId(channelId, lastChannelMessageId[channelId]);
+                    IEnumerable<MednaNetAPIClient.Models.Messages> messages = await client.Channels.GetChannelMessagesAfterMessageId(channelId, lastChannelMessageId[channelId]);
 
                     foreach (var message in messages)
                     {
@@ -131,7 +131,7 @@ namespace Chatter
             }
             else
             {
-                IEnumerable<MednaNetAPIClient.Data.Messages> messages = await client.Channels.GetChannelMessages(channelId);
+                IEnumerable<MednaNetAPIClient.Models.Messages> messages = await client.Channels.GetChannelMessages(channelId);
 
                 foreach (var message in messages)
                 {
@@ -154,7 +154,7 @@ namespace Chatter
 
         private async void displayUsers()
         {
-            List<MednaNetAPIClient.Data.Users> userList = await client.Users.GetAllUsers();
+            List<MednaNetAPIClient.Models.Users> userList = await client.Users.GetAllUsers();
 
             userListTV.Nodes.Clear();
 
@@ -180,7 +180,7 @@ namespace Chatter
             messageBox.AppendText(message.Text + System.Environment.NewLine);
             messageBox.AppendText(System.Environment.NewLine);
 
-            MednaNetAPIClient.Data.Messages newMessage = await client.Channels.CreateMessage(1, new MednaNetAPIClient.Data.Messages()
+            MednaNetAPIClient.Models.Messages newMessage = await client.Channels.CreateMessage(1, new MednaNetAPIClient.Models.Messages()
             {
                 channel = this.currentChannel,
                 code = installKey.Text,

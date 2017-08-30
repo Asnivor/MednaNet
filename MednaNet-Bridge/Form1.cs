@@ -62,7 +62,7 @@ namespace MednaNet_Bridge
             await guild.DownloadUsersAsync();
             var users = guild.Users;
 
-            List<MednaNetAPIClient.Data.Users> userList = new List<MednaNetAPIClient.Data.Users>();
+            List<MednaNetAPIClient.Models.Users> userList = new List<MednaNetAPIClient.Models.Users>();
             
             foreach(var user in users)
             {
@@ -75,7 +75,7 @@ namespace MednaNet_Bridge
                 }
 
                 // user.Nickname;
-                userList.Add(new MednaNetAPIClient.Data.Users()
+                userList.Add(new MednaNetAPIClient.Models.Users()
                 {
                     discordId = user.Id.ToString(),
                     username = user.Username,
@@ -104,7 +104,7 @@ namespace MednaNet_Bridge
                     isFirst = false;
                     foreach (var s in monitoredChannels)
                     {
-                        MednaNetAPIClient.Data.Messages message = await this.apiClient.Channels.GetChannelLastMessage(Convert.ToInt32(s.channelId));
+                        MednaNetAPIClient.Models.Messages message = await this.apiClient.Channels.GetChannelLastMessage(Convert.ToInt32(s.channelId));
 
                         if(message != null)
                         {
@@ -117,7 +117,7 @@ namespace MednaNet_Bridge
                 {
                     foreach (var s in monitoredChannels)
                     {
-                        IEnumerable<MednaNetAPIClient.Data.Messages> messages = await this.apiClient.Channels.GetChannelMessagesAfterMessageId(s.channelId, s.lastMessageId);
+                        IEnumerable<MednaNetAPIClient.Models.Messages> messages = await this.apiClient.Channels.GetChannelMessagesAfterMessageId(s.channelId, s.lastMessageId);
 
                         foreach (var message in messages.ToList())
                         {
@@ -197,7 +197,7 @@ namespace MednaNet_Bridge
 
                     if (channel != null)
                     {
-                        await this.apiClient.Channels.CreateMessage(channel.channelId, new MednaNetAPIClient.Data.Messages()
+                        await this.apiClient.Channels.CreateMessage(channel.channelId, new MednaNetAPIClient.Models.Messages()
                         {
                             channel = channel.channelId,
                             code = this.botInstallKey,

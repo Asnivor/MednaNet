@@ -25,28 +25,28 @@ namespace MednaNetAPIClient.Groups
         /// <param name="queryServer">If set to false the cached group list will be returned. If set to true then the web service will be queried for 
         /// the most up to date group list.</param>
         /// <returns></returns>
-        public async Task<IEnumerable<Data.Groups>> GetGroups()
+        public async Task<IEnumerable<Models.Groups>> GetGroups()
         {
-            List<Data.Groups> groups = null;
+            List<Models.Groups> groups = null;
             HttpResponseMessage response = await client.GetAsync("api/v1/groups");
 
             if (response.IsSuccessStatusCode)
             {
-                groups = await response.Content.ReadAsAsync<List<Data.Groups>>();
+                groups = await response.Content.ReadAsAsync<List<Models.Groups>>();
             }
             
             return groups;
         }
 
-        public async Task<Data.Groups> GetGroupById(int groupId)
+        public async Task<Models.Groups> GetGroupById(int groupId)
         {
-            Data.Groups group = null;
+            Models.Groups group = null;
 
             HttpResponseMessage response = await client.GetAsync("api/v1/groups/" + groupId.ToString());
 
             if (response.IsSuccessStatusCode)
             {
-                group = await response.Content.ReadAsAsync<Data.Groups>();
+                group = await response.Content.ReadAsAsync<Models.Groups>();
             }
 
             return group;
@@ -57,36 +57,36 @@ namespace MednaNetAPIClient.Groups
         /// </summary>
         /// <param name="group"></param>
         /// <returns></returns>
-        public async Task<Uri> CreateGroup(Data.Groups group)
+        public async Task<Uri> CreateGroup(Models.Groups group)
         {
             HttpResponseMessage response = await client.PostAsJsonAsync("api/v1/groups", group);
             response.EnsureSuccessStatusCode();
             return response.Headers.Location;
         }
 
-        public async Task<IEnumerable<Data.Messages>> GetGroupMessages(int groupId)
+        public async Task<IEnumerable<Models.Messages>> GetGroupMessages(int groupId)
         {
             HttpResponseMessage response = await client.GetAsync("api/v1/groups/" + groupId.ToString() + "/messages");
-            IEnumerable<Data.Messages> messages = null;
+            IEnumerable<Models.Messages> messages = null;
 
             if (response.IsSuccessStatusCode)
             {
-                messages = await response.Content.ReadAsAsync<IEnumerable<Data.Messages>>();
+                messages = await response.Content.ReadAsAsync<IEnumerable<Models.Messages>>();
             }
 
             return messages;
         }
 
-        public async Task<IEnumerable<Data.Messages>> GetGroupMessagesFrom(int groupId, DateTime from)
+        public async Task<IEnumerable<Models.Messages>> GetGroupMessagesFrom(int groupId, DateTime from)
         {
             string urlSafeDateString = from.ToUniversalTime().ToString("yyyyMMddTHHmmss", System.Globalization.CultureInfo.InvariantCulture);
 
             HttpResponseMessage response = await client.GetAsync("api/v1/groups/" + groupId.ToString() + "/messages/from/" + urlSafeDateString);
-            IEnumerable<Data.Messages> messages = null;
+            IEnumerable<Models.Messages> messages = null;
 
             if (response.IsSuccessStatusCode)
             {
-                messages = await response.Content.ReadAsAsync<IEnumerable<Data.Messages>>();
+                messages = await response.Content.ReadAsAsync<IEnumerable<Models.Messages>>();
             }
 
             return messages;

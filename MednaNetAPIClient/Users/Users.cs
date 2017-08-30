@@ -16,9 +16,9 @@ namespace MednaNetAPIClient.Users
             this.client = client;
         }
 
-        public async Task<List<Data.Users>> GetAllUsers()
+        public async Task<List<Models.Users>> GetAllUsers()
         {
-            List<Data.Users> allUsers = new List<Data.Users>();
+            List<Models.Users> allUsers = new List<Models.Users>();
 
             var discordUsers = await GetDiscordUsers();
             var medLaunchUsers = await GetMedLaunchUsers();
@@ -38,21 +38,21 @@ namespace MednaNetAPIClient.Users
             return allUsers;
         }
 
-        public async Task<List<Data.Users>> GetDiscordUsers()
+        public async Task<List<Models.Users>> GetDiscordUsers()
         {
             HttpResponseMessage response = await client.GetAsync("api/v1/discord/users");
 
-            List<Data.Users> users = null;
+            List<Models.Users> users = null;
 
             if (response.IsSuccessStatusCode)
             {
-                users = await response.Content.ReadAsAsync<List<Data.Users>>();
+                users = await response.Content.ReadAsAsync<List<Models.Users>>();
             }
 
             return users;
         }
 
-        public async Task<bool> AddDiscordUsers(List<MednaNetAPIClient.Data.Users> users)
+        public async Task<bool> AddDiscordUsers(List<MednaNetAPIClient.Models.Users> users)
         {
             HttpResponseMessage response = await client.PostAsJsonAsync("api/v1/discord/users", users);
             response.EnsureSuccessStatusCode();
@@ -71,15 +71,15 @@ namespace MednaNetAPIClient.Users
             return usersAdded;
         }
 
-        public async Task<List<Data.Users>> GetMedLaunchUsers()
+        public async Task<List<Models.Users>> GetMedLaunchUsers()
         {
             HttpResponseMessage response = await client.GetAsync("api/v1/users");
 
-            List<Data.Users> users = null;
+            List<Models.Users> users = null;
 
             if (response.IsSuccessStatusCode)
             {
-                users = await response.Content.ReadAsAsync<List<Data.Users>>();
+                users = await response.Content.ReadAsAsync<List<Models.Users>>();
             }
 
             return users;

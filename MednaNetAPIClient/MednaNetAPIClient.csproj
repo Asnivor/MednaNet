@@ -49,11 +49,11 @@
   <ItemGroup>
     <Compile Include="Channels\Channels.cs" />
     <Compile Include="Client.cs" />
-    <Compile Include="Data\Channels.cs" />
-    <Compile Include="Data\Groups.cs" />
-    <Compile Include="Data\Installs.cs" />
-    <Compile Include="Data\Messages.cs" />
-    <Compile Include="Data\Users.cs" />
+    <Compile Include="Models\Channels.cs" />
+    <Compile Include="Models\Groups.cs" />
+    <Compile Include="Models\Installs.cs" />
+    <Compile Include="Models\Messages.cs" />
+    <Compile Include="Models\Users.cs" />
     <Compile Include="Groups\Groups.cs" />
     <Compile Include="Installs\Installs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

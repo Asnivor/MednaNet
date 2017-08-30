@@ -20,14 +20,14 @@ namespace MednaNetAPIClient.Channels
         /// Returns a list of available Discord Channels.
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<Data.Channels>> GetChannels()
+        public async Task<IEnumerable<Models.Channels>> GetChannels()
         {
-            List<Data.Channels> channels = null;
+            List<Models.Channels> channels = null;
             HttpResponseMessage response = await client.GetAsync("api/v1/discord/channels");
 
             if (response.IsSuccessStatusCode)
             {
-                channels = await response.Content.ReadAsAsync<List<Data.Channels>>();
+                channels = await response.Content.ReadAsAsync<List<Models.Channels>>();
             }
 
             return channels;
@@ -38,15 +38,15 @@ namespace MednaNetAPIClient.Channels
         /// </summary>
         /// <param name="channelId">This is not the Discord Channel ID, it is the unique ID for the channel in the MednaNetAPI.</param>
         /// <returns></returns>
-        public async Task<Data.Channels> GetChannelById(int channelId)
+        public async Task<Models.Channels> GetChannelById(int channelId)
         {
-            Data.Channels channel = null;
+            Models.Channels channel = null;
 
             HttpResponseMessage response = await client.GetAsync("api/v1/discord/channels/" + channelId.ToString());
 
             if (response.IsSuccessStatusCode)
             {
-                channel = await response.Content.ReadAsAsync<Data.Channels>();
+                channel = await response.Content.ReadAsAsync<Models.Channels>();
             }
 
             return channel;
@@ -57,14 +57,14 @@ namespace MednaNetAPIClient.Channels
         /// </summary>
         /// <param name="channelId">This is not the Discord Channel ID, it is the unique ID for the channel in the MednaNetAPI.</param>
         /// <returns></returns>
-        public async Task<IEnumerable<Data.Messages>> GetChannelMessages(int channelId)
+        public async Task<IEnumerable<Models.Messages>> GetChannelMessages(int channelId)
         {
             HttpResponseMessage response = await client.GetAsync("api/v1/discord/channels/" + channelId.ToString() + "/messages");
-            IEnumerable<Data.Messages> messages = null;
+            IEnumerable<Models.Messages> messages = null;
 
             if (response.IsSuccessStatusCode)
             {
-                messages = await response.Content.ReadAsAsync<IEnumerable<Data.Messages>>();
+                messages = await response.Content.ReadAsAsync<IEnumerable<Models.Messages>>();
             }
 
             return messages;
@@ -75,14 +75,14 @@ namespace MednaNetAPIClient.Channels
         /// </summary>
         /// <param name="channelId">This is not the Discord Channel ID, it is the unique ID for the channel in the MednaNetAPI.</param>
         /// <returns></returns>
-        public async Task<Data.Messages> GetChannelLastMessage(int channelId)
+        public async Task<Models.Messages> GetChannelLastMessage(int channelId)
         {
             HttpResponseMessage response = await client.GetAsync("api/v1/discord/channels/" + channelId.ToString() + "/messages/last");
-            Data.Messages message = null;
+            Models.Messages message = null;
 
             if (response.IsSuccessStatusCode)
             {
-                message = await response.Content.ReadAsAsync<Data.Messages>();
+                message = await response.Content.ReadAsAsync<Models.Messages>();
             }
 
             return message;
@@ -94,16 +94,16 @@ namespace MednaNetAPIClient.Channels
         /// <param name="channelId">This is not the Discord Channel ID, it is the unique ID for the channel in the MednaNetAPI.</param>
         /// <param name="from">A DateTime representing the point in time that you want the messages to start from. </param>
         /// <returns></returns>
-        public async Task<IEnumerable<Data.Messages>> GetChannelMessagesFrom(int channelId, DateTime from)
+        public async Task<IEnumerable<Models.Messages>> GetChannelMessagesFrom(int channelId, DateTime from)
         {
             string urlSafeDateString = from.ToUniversalTime().ToString("yyyyMMddTHHmmss", System.Globalization.CultureInfo.InvariantCulture);
 
             HttpResponseMessage response = await client.GetAsync("api/v1/discord/channels/" + channelId.ToString() + "/messages/from/" + urlSafeDateString);
-            IEnumerable<Data.Messages> messages = null;
+            IEnumerable<Models.Messages> messages = null;
 
             if (response.IsSuccessStatusCode)
             {
-                messages = await response.Content.ReadAsAsync<IEnumerable<Data.Messages>>();
+                messages = await response.Content.ReadAsAsync<IEnumerable<Models.Messages>>();
             }
 
             return messages;
@@ -115,16 +115,16 @@ namespace MednaNetAPIClient.Channels
         /// <param name="channelId">This is not the Discord Channel ID, it is the unique ID for the channel in the MednaNetAPI.</param>
         /// <param name="messageId">This is not the Discord Message ID, it is the unique ID for the message in the MednaNetAPI.</param>
         /// <returns></returns>
-        public async Task<IEnumerable<Data.Messages>> GetChannelMessagesAfterMessageId(int channelId, int messageId)
+        public async Task<IEnumerable<Models.Messages>> GetChannelMessagesAfterMessageId(int channelId, int messageId)
         {
             
 
             HttpResponseMessage response = await client.GetAsync("api/v1/discord/channels/" + channelId.ToString() + "/messages/after/" + messageId.ToString());
-            IEnumerable<Data.Messages> messages = null;
+            IEnumerable<Models.Messages> messages = null;
 
             if (response.IsSuccessStatusCode)
             {
-                messages = await response.Content.ReadAsAsync<IEnumerable<Data.Messages>>();
+                messages = await response.Content.ReadAsAsync<IEnumerable<Models.Messages>>();
             }
 
             return messages;
@@ -136,16 +136,16 @@ namespace MednaNetAPIClient.Channels
         /// <param name="channelId">This is not the Discord Channel ID, it is the unique ID for the channel in the MednaNetAPI.</param>
         /// <param name="message">A message object containing the message details</param>
         /// <returns></returns>
-        public async Task<Data.Messages> CreateMessage(int channelId, Data.Messages message)
+        public async Task<Models.Messages> CreateMessage(int channelId, Models.Messages message)
         {
             HttpResponseMessage response = await client.PostAsJsonAsync("api/v1/discord/channels/" + channelId.ToString() + "/messages", message);
             response.EnsureSuccessStatusCode();
 
-            Data.Messages newMessage = null;
+            Models.Messages newMessage = null;
 
             if (response.IsSuccessStatusCode)
             {
-                newMessage = await response.Content.ReadAsAsync<Data.Messages>();
+                newMessage = await response.Content.ReadAsAsync<Models.Messages>();
             }
 
             return newMessage;

@@ -20,14 +20,14 @@ namespace MednaNetAPIClient.Installs
         /// <summary>
         /// Creates a new install and registers it with MednaNet. 
         /// </summary>
-        public async Task<Data.Installs> CreateNewInstall()
+        public async Task<Models.Installs> CreateNewInstall()
         {
             HttpResponseMessage response = await client.PostAsJsonAsync("api/v1/installs", "");
-            Data.Installs install = null;
+            Models.Installs install = null;
 
             if (response.IsSuccessStatusCode)
             {
-                install = await response.Content.ReadAsAsync<Data.Installs>();
+                install = await response.Content.ReadAsAsync<Models.Installs>();
             }
 
             return install;
@@ -36,7 +36,7 @@ namespace MednaNetAPIClient.Installs
         /// <summary>
         /// Returns an Install specified by installKey. If the install key is passed as a blank string a new install will be created. 
         /// </summary>
-        public async Task<Data.Installs> GetCurrentInstall(string installKey)
+        public async Task<Models.Installs> GetCurrentInstall(string installKey)
         {
             if(installKey == "")
             {
@@ -45,11 +45,11 @@ namespace MednaNetAPIClient.Installs
             else
             {
                 HttpResponseMessage response = await client.GetAsync("api/v1/installs");
-                Data.Installs install = null;
+                Models.Installs install = null;
 
                 if (response.IsSuccessStatusCode)
                 {
-                    install = await response.Content.ReadAsAsync<Data.Installs>();
+                    install = await response.Content.ReadAsAsync<Models.Installs>();
                 }
 
                 return install;
@@ -61,7 +61,7 @@ namespace MednaNetAPIClient.Installs
         /// </summary>
         /// <param name="install"></param>
         /// <returns></returns>
-        public async Task<bool> UpdateUsername(Data.Installs install)
+        public async Task<bool> UpdateUsername(Models.Installs install)
         {
             HttpResponseMessage response = await client.PutAsJsonAsync("api/v1/installs", install);
 
