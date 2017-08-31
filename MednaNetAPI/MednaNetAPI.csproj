@@ -185,6 +185,7 @@
     <Compile Include="Models\discord_users.cs">
       <DependentUpon>Chat.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Errors.cs" />
     <Compile Include="Models\group.cs">
       <DependentUpon>Chat.tt</DependentUpon>
     </Compile>
