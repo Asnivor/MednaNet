@@ -51,7 +51,7 @@ namespace Chatter
 
         private async void LoadClient(object sender, EventArgs e)
         {
-            this.client = new MednaNetAPIClient.Client("localhost", "24215", "562ad8ef-12c4-4596-ac58-f5021749541b");
+            this.client = new MednaNetAPIClient.Client("mednanet.medlaunch.info", "24215", "562ad8ef-12c4-4596-ac58-f5021749541b");
 
             currentInstall = await this.client.Install.GetCurrentInstall("562ad8ef-12c4-4596-ac58-f5021749541b");
 

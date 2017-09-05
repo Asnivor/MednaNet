@@ -68,7 +68,7 @@ namespace MednaNetAPIClient
             url = apiHostname.Replace("http://", "").Replace("https://", "");
             port = apiPort;
 
-            this.client.BaseAddress = new Uri("http://" + url + ":" + port + "/"); //This needs to be https
+            this.client.BaseAddress = new Uri("https://" + url + ":" + port + "/"); 
             this.client.DefaultRequestHeaders.Accept.Clear();
             this.client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             this.client.DefaultRequestHeaders.Add("Authorization", installKey);
