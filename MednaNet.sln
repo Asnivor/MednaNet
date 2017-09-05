@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MednaNetAPIClient", "MednaN
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MednaNet-Bridge", "MednaNet-Bridge\MednaNet-Bridge.csproj", "{8A8E6E3A-EAB9-469A-87F0-205FBEA60972}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "MednaNetSQL", "MednaNetSQL\MednaNetSQL.sqlproj", "{F9C35461-BCC4-41EE-88BD-2D19AF96C04B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,12 @@ Global
 		{8A8E6E3A-EAB9-469A-87F0-205FBEA60972}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8A8E6E3A-EAB9-469A-87F0-205FBEA60972}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8A8E6E3A-EAB9-469A-87F0-205FBEA60972}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9C35461-BCC4-41EE-88BD-2D19AF96C04B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9C35461-BCC4-41EE-88BD-2D19AF96C04B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9C35461-BCC4-41EE-88BD-2D19AF96C04B}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{F9C35461-BCC4-41EE-88BD-2D19AF96C04B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9C35461-BCC4-41EE-88BD-2D19AF96C04B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9C35461-BCC4-41EE-88BD-2D19AF96C04B}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
