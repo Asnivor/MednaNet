@@ -18,7 +18,7 @@ namespace MednaNet_Bridge
         private DiscordSocketClient client;
         private List<Data.MonitoredChannel> monitoredChannels = new List<Data.MonitoredChannel>();
         private MednaNetAPIClient.Client apiClient;
-        private string botInstallKey = "botInstallKey";
+        private string botInstallKey = System.Configuration.ConfigurationManager.AppSettings["botInstallKey"];
         private DateTime lastMessageUpdateFrom = DateTime.Now;
         private bool isUpdating = false;
         private bool isFirst = true;
@@ -54,11 +54,9 @@ namespace MednaNet_Bridge
             
         }
 
-
         private async void GetUsers()
         {
-
-            SocketGuild guild = client.GetGuild(334657816717688832);
+            SocketGuild guild = client.GetGuild(Convert.ToUInt64(System.Configuration.ConfigurationManager.AppSettings["botDiscordId"]));
             await guild.DownloadUsersAsync();
             var users = guild.Users;
 
@@ -85,11 +83,7 @@ namespace MednaNet_Bridge
 
                 
             }
-
             await apiClient.Users.AddDiscordUsers(userList);
-
-
-            //client.DownloadUsersAsync();
         }
 
         private async void GetMessages()
@@ -139,26 +133,23 @@ namespace MednaNet_Bridge
 
         private async void StartBot(object sender, EventArgs e)
         {
-            monitoredChannels.Add(new Data.MonitoredChannel()
-            {
-                channelName = "development",
-                channelId = 1,
-                discordChannelId = "335445676227952640",
-                lastMessageId = 0
-            });
-
-            monitoredChannels.Add(new Data.MonitoredChannel()
-            {
-                channelName = "general",
-                channelId = 2,
-                discordChannelId = "334657816717688832",
-                lastMessageId = 0
-            });
-
 
             await startBot();
 
             this.apiClient = new MednaNetAPIClient.Client("localhost", "24215", this.botInstallKey);
+
+            var channels = await this.apiClient.Channels.GetChannels();
+
+            foreach(var channel in channels)
+            {
+                monitoredChannels.Add(new Data.MonitoredChannel()
+                {
+                    channelName = channel.channelName,
+                    channelId = channel.id,
+                    discordChannelId = channel.discordId,
+                    lastMessageId = 0
+                });
+            }
 
             SetupTimer();
         }
@@ -176,8 +167,8 @@ namespace MednaNet_Bridge
 
         private async void SendBotMessage(object sender, EventArgs e)
         {
-            var ch = this.client.GetChannel(335445676227952640) as ISocketMessageChannel;
-            await ch.SendMessageAsync(botMessage.Text);
+            //var ch = this.client.GetChannel(335445676227952640) as ISocketMessageChannel;
+            //await ch.SendMessageAsync(botMessage.Text);
         }
 
         private Task Log(LogMessage msg)
@@ -188,8 +179,11 @@ namespace MednaNet_Bridge
 
         private async Task MessageReceived(SocketMessage message)
         {
+            
+
+
             //Don't add the message if is a message that the bot has posted.
-            if (message.Author.Id != 335858899049512960) //This is the Bots ID
+            if (message.Author.Id != Convert.ToUInt64(System.Configuration.ConfigurationManager.AppSettings["botDiscordId"])) //This is the Bots ID
             {
                 if (monitoredChannels.Exists(x => x.channelName == message.Channel.Name))
                 {

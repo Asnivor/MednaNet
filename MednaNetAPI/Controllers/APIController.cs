@@ -693,7 +693,8 @@ namespace MednaNetAPI.Controllers
                                 select new MednaNetAPIClient.Models.Channels()
                                 {
                                     channelName = q.channel_name,
-                                    id = q.id
+                                    id = q.id,
+                                    discordId = q.channel_discord_id
                                 }).ToList();
                 }
             }

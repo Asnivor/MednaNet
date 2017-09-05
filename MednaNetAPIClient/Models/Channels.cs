@@ -9,6 +9,7 @@ namespace MednaNetAPIClient.Models
     public class Channels
     {
         public int id { get; set; }
+        public string discordId { get; set; }
         public string channelName { get; set; }
     }
 }
