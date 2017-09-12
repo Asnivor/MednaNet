@@ -25,6 +25,7 @@ namespace MednaNet_Bridge
         private string mednaNetAPIUrl = System.Configuration.ConfigurationManager.AppSettings["mednaNetAPIUrl"];
         private string mednaNetAPIPort = System.Configuration.ConfigurationManager.AppSettings["mednaNetAPIPort"];
         private string botDiscordId = System.Configuration.ConfigurationManager.AppSettings["botDiscordId"];
+        private string botToken = System.Configuration.ConfigurationManager.AppSettings["botToken"];
 
         private int getUserCount = 0;
 
@@ -156,7 +157,7 @@ namespace MednaNet_Bridge
             this.client.Log += Log;
             this.client.MessageReceived += MessageReceived;
 
-            string token = botToken.Text;
+            string token = this.botToken;
             await this.client.LoginAsync(TokenType.Bot, token);
             await this.client.StartAsync();
         }
