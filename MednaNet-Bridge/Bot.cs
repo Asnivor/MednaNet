@@ -13,7 +13,7 @@ using System.Threading;
 
 namespace MednaNet_Bridge
 {
-    public partial class Form1 : Form
+    public partial class Bot : Form
     {
         private DiscordSocketClient client;
         private List<Data.MonitoredChannel> monitoredChannels = new List<Data.MonitoredChannel>();
@@ -48,7 +48,7 @@ namespace MednaNet_Bridge
             }
         }
 
-        public Form1()
+        public Bot()
         {
             InitializeComponent();
             

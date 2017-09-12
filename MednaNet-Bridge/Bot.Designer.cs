@@ -1,6 +1,6 @@
 ﻿namespace MednaNet_Bridge
 {
-    partial class Form1
+    partial class Bot
     {
         /// <summary>
         /// Required designer variable.
