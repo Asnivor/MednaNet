@@ -26,6 +26,7 @@ namespace MednaNet_Bridge
         private string mednaNetAPIPort = System.Configuration.ConfigurationManager.AppSettings["mednaNetAPIPort"];
         private string botDiscordId = System.Configuration.ConfigurationManager.AppSettings["botDiscordId"];
         private string botToken = System.Configuration.ConfigurationManager.AppSettings["botToken"];
+        private string guildId = System.Configuration.ConfigurationManager.AppSettings["guildId"];
 
         private int getUserCount = 0;
 
@@ -59,7 +60,7 @@ namespace MednaNet_Bridge
 
         private async void GetUsers()
         {
-            SocketGuild guild = client.GetGuild(Convert.ToUInt64(botDiscordId));
+            SocketGuild guild = client.GetGuild(Convert.ToUInt64(guildId));
             await guild.DownloadUsersAsync();
             var users = guild.Users;
 
