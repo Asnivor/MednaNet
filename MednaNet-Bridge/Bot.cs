@@ -16,12 +16,15 @@ namespace MednaNet_Bridge
     public partial class Bot : Form
     {
         private DiscordSocketClient client;
-        private List<Data.MonitoredChannel> monitoredChannels = new List<Data.MonitoredChannel>();
         private MednaNetAPIClient.Client apiClient;
-        private string botInstallKey = System.Configuration.ConfigurationManager.AppSettings["botInstallKey"];
+        private List<Data.MonitoredChannel> monitoredChannels = new List<Data.MonitoredChannel>();
         private DateTime lastMessageUpdateFrom = DateTime.Now;
         private bool isUpdating = false;
         private bool isFirst = true;
+        private string botInstallKey = System.Configuration.ConfigurationManager.AppSettings["botInstallKey"];
+        private string mednaNetAPIUrl = System.Configuration.ConfigurationManager.AppSettings["mednaNetAPIUrl"];
+        private string mednaNetAPIPort = System.Configuration.ConfigurationManager.AppSettings["mednaNetAPIPort"];
+        private string botDiscordId = System.Configuration.ConfigurationManager.AppSettings["botDiscordId"];
 
         private int getUserCount = 0;
 
@@ -51,12 +54,11 @@ namespace MednaNet_Bridge
         public Bot()
         {
             InitializeComponent();
-            
         }
 
         private async void GetUsers()
         {
-            SocketGuild guild = client.GetGuild(Convert.ToUInt64(System.Configuration.ConfigurationManager.AppSettings["botDiscordId"]));
+            SocketGuild guild = client.GetGuild(Convert.ToUInt64(botDiscordId));
             await guild.DownloadUsersAsync();
             var users = guild.Users;
 
@@ -64,7 +66,6 @@ namespace MednaNet_Bridge
             
             foreach(var user in users)
             {
-
                 bool temp = false;
 
                 if(user.Status != UserStatus.Offline)
@@ -72,7 +73,6 @@ namespace MednaNet_Bridge
                     temp = true;
                 }
 
-                // user.Nickname;
                 userList.Add(new MednaNetAPIClient.Models.Users()
                 {
                     discordId = user.Id.ToString(),
@@ -80,8 +80,6 @@ namespace MednaNet_Bridge
                     isOnline = temp
 
                 });
-
-                
             }
             await apiClient.Users.AddDiscordUsers(userList);
         }
@@ -91,7 +89,6 @@ namespace MednaNet_Bridge
             if (!this.isUpdating)
             {
                 this.isUpdating = true;
-
 
                 if (isFirst)
                 {
@@ -133,10 +130,9 @@ namespace MednaNet_Bridge
 
         private async void StartBot(object sender, EventArgs e)
         {
-
             await startBot();
 
-            this.apiClient = new MednaNetAPIClient.Client("localhost", "24215", this.botInstallKey);
+            this.apiClient = new MednaNetAPIClient.Client(this.mednaNetAPIUrl, this.mednaNetAPIPort, this.botInstallKey);
 
             var channels = await this.apiClient.Channels.GetChannels();
 
@@ -179,11 +175,7 @@ namespace MednaNet_Bridge
 
         private async Task MessageReceived(SocketMessage message)
         {
-            
-
-
-            //Don't add the message if is a message that the bot has posted.
-            if (message.Author.Id != Convert.ToUInt64(System.Configuration.ConfigurationManager.AppSettings["botDiscordId"])) //This is the Bots ID
+            if (message.Author.Id != Convert.ToUInt64(botDiscordId)) 
             {
                 if (monitoredChannels.Exists(x => x.channelName == message.Channel.Name))
                 {
