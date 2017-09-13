@@ -32,7 +32,11 @@ namespace MednaNetAPIClient.Groups
             {
                 groups = await response.Content.ReadAsAsync<List<Models.Groups>>();
             }
-            
+            else
+            {
+                throw new System.Exception(response.StatusCode.ToString() + ": " + response.Content.ToString());
+            }
+
             return groups;
         }
 
@@ -51,6 +55,10 @@ namespace MednaNetAPIClient.Groups
             {
                 group = await response.Content.ReadAsAsync<Models.Groups>();
             }
+            else
+            {
+                throw new System.Exception(response.StatusCode.ToString() + ": " + response.Content.ToString());
+            }
 
             return group;
         }
@@ -63,8 +71,15 @@ namespace MednaNetAPIClient.Groups
         public async Task<Uri> CreateGroup(Models.Groups group)
         {
             HttpResponseMessage response = await client.PostAsJsonAsync("api/v1/groups", group);
-            response.EnsureSuccessStatusCode();
-            return response.Headers.Location;
+
+            if (response.IsSuccessStatusCode)
+            {
+                return response.Headers.Location;
+            }
+            else
+            {
+                throw new System.Exception(response.StatusCode.ToString() + ": " + response.Content.ToString());
+            }
         }
 
         /// <summary>
@@ -80,6 +95,10 @@ namespace MednaNetAPIClient.Groups
             if (response.IsSuccessStatusCode)
             {
                 messages = await response.Content.ReadAsAsync<IEnumerable<Models.Messages>>();
+            }
+            else
+            {
+                throw new System.Exception(response.StatusCode.ToString() + ": " + response.Content.ToString());
             }
 
             return messages;
@@ -101,6 +120,10 @@ namespace MednaNetAPIClient.Groups
             if (response.IsSuccessStatusCode)
             {
                 messages = await response.Content.ReadAsAsync<IEnumerable<Models.Messages>>();
+            }
+            else
+            {
+                throw new System.Exception(response.StatusCode.ToString() + ": " + response.Content.ToString());
             }
 
             return messages;

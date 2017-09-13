@@ -66,6 +66,10 @@ namespace MednaNetAPIClient.Channels
             {
                 messages = await response.Content.ReadAsAsync<IEnumerable<Models.Messages>>();
             }
+            else
+            {
+                throw new System.Exception(response.StatusCode.ToString() + ": " + response.Content.ToString());
+            }
 
             return messages;
         }
@@ -83,6 +87,10 @@ namespace MednaNetAPIClient.Channels
             if (response.IsSuccessStatusCode)
             {
                 message = await response.Content.ReadAsAsync<Models.Messages>();
+            }
+            else
+            {
+                throw new System.Exception(response.StatusCode.ToString() + ": " + response.Content.ToString());
             }
 
             return message;
@@ -105,6 +113,10 @@ namespace MednaNetAPIClient.Channels
             {
                 messages = await response.Content.ReadAsAsync<IEnumerable<Models.Messages>>();
             }
+            else
+            {
+                throw new System.Exception(response.StatusCode.ToString() + ": " + response.Content.ToString());
+            }
 
             return messages;
         }
@@ -126,6 +138,10 @@ namespace MednaNetAPIClient.Channels
             {
                 messages = await response.Content.ReadAsAsync<IEnumerable<Models.Messages>>();
             }
+            else
+            {
+                throw new System.Exception(response.StatusCode.ToString() + ": " + response.Content.ToString());
+            }
 
             return messages;
         }
@@ -146,6 +162,10 @@ namespace MednaNetAPIClient.Channels
             if (response.IsSuccessStatusCode)
             {
                 newMessage = await response.Content.ReadAsAsync<Models.Messages>();
+            }
+            else
+            {
+                throw new System.Exception(response.StatusCode.ToString() + ": " + response.Content.ToString());
             }
 
             return newMessage;

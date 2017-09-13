@@ -29,6 +29,10 @@ namespace MednaNetAPIClient.Installs
             {
                 install = await response.Content.ReadAsAsync<Models.Installs>();
             }
+            else
+            {
+                throw new System.Exception(response.StatusCode.ToString() + ": " + response.Content.ToString());
+            }
 
             return install;
         }
@@ -51,6 +55,10 @@ namespace MednaNetAPIClient.Installs
                 {
                     install = await response.Content.ReadAsAsync<Models.Installs>();
                 }
+                else
+                {
+                    throw new System.Exception(response.StatusCode.ToString() + ": " + response.Content.ToString());
+                }
 
                 return install;
             }
@@ -71,10 +79,8 @@ namespace MednaNetAPIClient.Installs
             }
             else
             {
-                return false;
+                throw new System.Exception(response.StatusCode.ToString() + ": " + response.Content.ToString());
             }
-
-            
         }
     }
 }

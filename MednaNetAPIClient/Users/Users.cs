@@ -56,6 +56,10 @@ namespace MednaNetAPIClient.Users
             {
                 users = await response.Content.ReadAsAsync<List<Models.Users>>();
             }
+            else
+            {
+                throw new System.Exception(response.StatusCode.ToString() + ": " + response.Content.ToString());
+            }
 
             return users;
         }
@@ -78,8 +82,9 @@ namespace MednaNetAPIClient.Users
             }
             else
             {
-                usersAdded = false;
+                throw new System.Exception(response.StatusCode.ToString() + ": " + response.Content.ToString());
             }
+
 
             return usersAdded;
         }
@@ -97,6 +102,10 @@ namespace MednaNetAPIClient.Users
             if (response.IsSuccessStatusCode)
             {
                 users = await response.Content.ReadAsAsync<List<Models.Users>>();
+            }
+            else
+            {
+                throw new System.Exception(response.StatusCode.ToString() + ": " + response.Content.ToString());
             }
 
             return users;
