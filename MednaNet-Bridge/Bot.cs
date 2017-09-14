@@ -35,6 +35,7 @@ namespace MednaNet_Bridge
             System.Timers.Timer t = new System.Timers.Timer(5000);
             t.AutoReset = true;
             t.Elapsed += T_Elapsed;
+            t.SynchronizingObject = this;
             t.Start();
         }
 
@@ -60,6 +61,8 @@ namespace MednaNet_Bridge
 
         private async void GetUsers()
         {
+            textBox1.AppendText("Getting users." + System.Environment.NewLine);
+
             SocketGuild guild = client.GetGuild(Convert.ToUInt64(guildId));
             await guild.DownloadUsersAsync();
             var users = guild.Users;
@@ -88,8 +91,12 @@ namespace MednaNet_Bridge
 
         private async void GetMessages()
         {
+            textBox1.AppendText("Getting messages." + System.Environment.NewLine);
+
             if (!this.isUpdating)
             {
+                textBox1.AppendText("Not updating, get messages." + System.Environment.NewLine);
+
                 this.isUpdating = true;
 
                 if (isFirst)
@@ -134,6 +141,8 @@ namespace MednaNet_Bridge
         {
             await startBot();
 
+            label1.Text = "BOT RUNNING!!";
+
             this.apiClient = new MednaNetAPIClient.Client(this.mednaNetAPIUrl, this.mednaNetAPIPort, this.botInstallKey);
 
             var channels = await this.apiClient.Channels.GetChannels();
@@ -177,14 +186,22 @@ namespace MednaNet_Bridge
 
         private async Task MessageReceived(SocketMessage message)
         {
+            //textBox1.AppendText("Messages received" + System.Environment.NewLine);
+
             if (message.Author.Id != Convert.ToUInt64(botDiscordId)) 
             {
+               // textBox1.AppendText("Message isn't the bot" + System.Environment.NewLine);
+
                 if (monitoredChannels.Exists(x => x.channelName == message.Channel.Name))
                 {
+                    //textBox1.AppendText("Channel is a monitored channel." + System.Environment.NewLine);
+
                     var channel = monitoredChannels.Where(x => x.channelName == message.Channel.Name).FirstOrDefault();
 
                     if (channel != null)
                     {
+                        //textBox1.AppendText("Add message to channel." + System.Environment.NewLine);
+
                         await this.apiClient.Channels.CreateMessage(channel.channelId, new MednaNetAPIClient.Models.Messages()
                         {
                             channel = channel.channelId,

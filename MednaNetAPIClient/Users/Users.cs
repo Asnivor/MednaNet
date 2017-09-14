@@ -72,7 +72,7 @@ namespace MednaNetAPIClient.Users
         public async Task<bool> AddDiscordUsers(List<MednaNetAPIClient.Models.Users> users)
         {
             HttpResponseMessage response = await client.PostAsJsonAsync("api/v1/discord/users", users);
-            response.EnsureSuccessStatusCode();
+            
 
             bool usersAdded = false;
 
