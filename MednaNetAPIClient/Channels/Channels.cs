@@ -100,7 +100,7 @@ namespace MednaNetAPIClient.Channels
         /// Returns a list of channel messages for a specific channel from a point in time.
         /// </summary>
         /// <param name="channelId">This is not the Discord Channel ID, it is the unique ID for the channel in the MednaNetAPI.</param>
-        /// <param name="from">A DateTime representing the point in time that you want the messages to start from. </param>
+        /// <param name="from">A DateTime representing the point in time that you want the messages to start from.  </param>
         /// <returns></returns>
         public async Task<IEnumerable<Models.Messages>> GetChannelMessagesFrom(int channelId, DateTime from)
         {

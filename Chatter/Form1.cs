@@ -51,8 +51,8 @@ namespace Chatter
 
         private async void LoadClient(object sender, EventArgs e)
         {
-            this.client = new MednaNetAPIClient.Client("mednanet.medlaunch.info", "443", "562ad8ef-12c4-4596-ac58-f5021749541b");
-            //this.client = new MednaNetAPIClient.Client("localhost", "24215", "562ad8ef-12c4-4596-ac58-f5021749541b");
+            //this.client = new MednaNetAPIClient.Client("mednanet.medlaunch.info", "443", "562ad8ef-12c4-4596-ac58-f5021749541b");
+            this.client = new MednaNetAPIClient.Client("localhost", "24215", "562ad8ef-12c4-4596-ac58-f5021749541b");
 
             currentInstall = await this.client.Install.GetCurrentInstall("562ad8ef-12c4-4596-ac58-f5021749541b");
 
@@ -83,6 +83,7 @@ namespace Chatter
            if(e.Node.Tag != null)
             {
                 this.currentChannel = (int)e.Node.Tag;
+                currentChannelName.Text = e.Node.Text;
                 messageBox.Text = "";
                 displayMessages(this.currentChannel);
             }
@@ -95,7 +96,9 @@ namespace Chatter
 
                 if(messageBox.Text == "")
                 {
-                    IEnumerable<MednaNetAPIClient.Models.Messages> messages = await client.Channels.GetChannelMessages(channelId);
+                    //IEnumerable<MednaNetAPIClient.Models.Messages> messages = await client.Channels.GetChannelMessages(channelId);
+                    //Get all the messages for the last 5 minutes
+                    IEnumerable<MednaNetAPIClient.Models.Messages> messages = await client.Channels.GetChannelMessagesFrom(channelId, DateTime.Now.AddMinutes(-5));
 
                     foreach (var message in messages)
                     {
@@ -132,7 +135,7 @@ namespace Chatter
             }
             else
             {
-                IEnumerable<MednaNetAPIClient.Models.Messages> messages = await client.Channels.GetChannelMessages(channelId);
+                IEnumerable<MednaNetAPIClient.Models.Messages> messages = await client.Channels.GetChannelMessagesFrom(channelId, DateTime.Now.AddMinutes(-5));
 
                 foreach (var message in messages)
                 {
@@ -181,7 +184,7 @@ namespace Chatter
             messageBox.AppendText(message.Text + System.Environment.NewLine);
             messageBox.AppendText(System.Environment.NewLine);
 
-            MednaNetAPIClient.Models.Messages newMessage = await client.Channels.CreateMessage(1, new MednaNetAPIClient.Models.Messages()
+            MednaNetAPIClient.Models.Messages newMessage = await client.Channels.CreateMessage(this.currentChannel, new MednaNetAPIClient.Models.Messages()
             {
                 channel = this.currentChannel,
                 code = installKey.Text,

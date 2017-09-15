@@ -39,6 +39,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.userListTV = new System.Windows.Forms.TreeView();
             this.label4 = new System.Windows.Forms.Label();
+            this.currentChannelName = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // button1
@@ -135,11 +136,20 @@
             this.label4.TabIndex = 12;
             this.label4.Text = "Users";
             // 
+            // currentChannelName
+            // 
+            this.currentChannelName.AutoSize = true;
+            this.currentChannelName.Location = new System.Drawing.Point(236, 13);
+            this.currentChannelName.Name = "currentChannelName";
+            this.currentChannelName.Size = new System.Drawing.Size(0, 13);
+            this.currentChannelName.TabIndex = 13;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(803, 461);
+            this.Controls.Add(this.currentChannelName);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.userListTV);
             this.Controls.Add(this.label2);
@@ -171,6 +181,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TreeView userListTV;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label currentChannelName;
     }
 }
 
