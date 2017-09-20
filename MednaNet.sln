@@ -3,11 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26430.15
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MednaNetAPI", "ChatAPI\MednaNetAPI.csproj", "{38F2FB23-7ADB-4E0E-B5F1-D639E1C4B867}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MednaNetAPI", "MednaNetAPI\MednaNetAPI.csproj", "{38F2FB23-7ADB-4E0E-B5F1-D639E1C4B867}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chatter", "Chatter\Chatter.csproj", "{D0329E55-86C0-4508-A184-C6BE052BAE80}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MednaNetAPIClient", "ChatAPIClient\MednaNetAPIClient.csproj", "{AA7C3CF6-2C61-4B01-994C-F57634B2A695}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MednaNetAPIClient", "MednaNetAPIClient\MednaNetAPIClient.csproj", "{AA7C3CF6-2C61-4B01-994C-F57634B2A695}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MednaNet-Bridge", "MednaNet-Bridge\MednaNet-Bridge.csproj", "{8A8E6E3A-EAB9-469A-87F0-205FBEA60972}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "MednaNetSQL", "MednaNetSQL\MednaNetSQL.sqlproj", "{F9C35461-BCC4-41EE-88BD-2D19AF96C04B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +31,12 @@ Global
 		{AA7C3CF6-2C61-4B01-994C-F57634B2A695}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AA7C3CF6-2C61-4B01-994C-F57634B2A695}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AA7C3CF6-2C61-4B01-994C-F57634B2A695}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A8E6E3A-EAB9-469A-87F0-205FBEA60972}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A8E6E3A-EAB9-469A-87F0-205FBEA60972}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A8E6E3A-EAB9-469A-87F0-205FBEA60972}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A8E6E3A-EAB9-469A-87F0-205FBEA60972}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9C35461-BCC4-41EE-88BD-2D19AF96C04B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9C35461-BCC4-41EE-88BD-2D19AF96C04B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
