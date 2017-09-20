@@ -202,11 +202,29 @@ namespace MednaNet_Bridge
                     {
                         //textBox1.AppendText("Add message to channel." + System.Environment.NewLine);
 
+                        string attachmentURLS = "";
+                        string messagecontent = message.Content;
+
+                        if(message.Attachments.Count > 0)
+                        {
+                            foreach(var attachment in message.Attachments)
+                            {
+                                attachmentURLS += attachment.Url + ", ";
+                            }
+
+                            if(attachmentURLS.EndsWith(", "))
+                            {
+                                attachmentURLS = attachmentURLS.Substring(0, attachmentURLS.Length - 2);
+                            }
+
+                            messagecontent += " " + attachmentURLS;
+                        }
+
                         await this.apiClient.Channels.CreateMessage(channel.channelId, new MednaNetAPIClient.Models.Messages()
                         {
                             channel = channel.channelId,
                             code = this.botInstallKey,
-                            message = message.Content,
+                            message = messagecontent,
                             name = message.Author.Username,
                             postedOn = message.CreatedAt.LocalDateTime
                         });
