@@ -56,6 +56,8 @@ namespace Chatter
 
             currentInstall = await this.client.Install.GetCurrentInstall("562ad8ef-12c4-4596-ac58-f5021749541b");
 
+            usernameText.Text = currentInstall.username;
+
             IEnumerable<MednaNetAPIClient.Models.Channels> channels = await this.client.Channels.GetChannels();
 
             
@@ -194,6 +196,12 @@ namespace Chatter
             });
 
             lastChannelMessageId[this.currentChannel] = newMessage.id;
+        }
+
+        private async void updateusername(object sender, EventArgs e)
+        {
+            currentInstall.username = usernameText.Text;
+            await client.Install.UpdateUsername(currentInstall);
         }
     }
 }

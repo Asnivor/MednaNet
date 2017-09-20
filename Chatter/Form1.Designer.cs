@@ -40,6 +40,9 @@
             this.userListTV = new System.Windows.Forms.TreeView();
             this.label4 = new System.Windows.Forms.Label();
             this.currentChannelName = new System.Windows.Forms.Label();
+            this.usernameText = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.button3 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -106,7 +109,7 @@
             // 
             // treeView1
             // 
-            this.treeView1.Location = new System.Drawing.Point(12, 110);
+            this.treeView1.Location = new System.Drawing.Point(12, 200);
             this.treeView1.Name = "treeView1";
             this.treeView1.Size = new System.Drawing.Size(218, 113);
             this.treeView1.TabIndex = 3;
@@ -114,7 +117,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(13, 91);
+            this.label2.Location = new System.Drawing.Point(9, 184);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(51, 13);
             this.label2.TabIndex = 10;
@@ -144,11 +147,40 @@
             this.currentChannelName.Size = new System.Drawing.Size(0, 13);
             this.currentChannelName.TabIndex = 13;
             // 
+            // usernameText
+            // 
+            this.usernameText.Location = new System.Drawing.Point(12, 116);
+            this.usernameText.Name = "usernameText";
+            this.usernameText.Size = new System.Drawing.Size(218, 20);
+            this.usernameText.TabIndex = 14;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(9, 100);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(55, 13);
+            this.label5.TabIndex = 15;
+            this.label5.Text = "Username";
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(12, 143);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(218, 23);
+            this.button3.TabIndex = 16;
+            this.button3.Text = "Set user name";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.updateusername);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(803, 461);
+            this.Controls.Add(this.button3);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.usernameText);
             this.Controls.Add(this.currentChannelName);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.userListTV);
@@ -182,6 +214,9 @@
         private System.Windows.Forms.TreeView userListTV;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label currentChannelName;
+        private System.Windows.Forms.TextBox usernameText;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Button button3;
     }
 }
 
