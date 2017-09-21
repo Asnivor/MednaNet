@@ -71,7 +71,12 @@ namespace MednaNetAPIClient
             this.client.BaseAddress = new Uri("https://" + url + ":" + port + "/"); 
             this.client.DefaultRequestHeaders.Accept.Clear();
             this.client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            this.client.DefaultRequestHeaders.Add("Authorization", installKey);
+
+            if(installKey != "")
+            {
+                this.client.DefaultRequestHeaders.Add("Authorization", installKey);
+            }
+            
 
             this.install = new Installs.Installs(this.client);
 

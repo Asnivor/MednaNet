@@ -34,6 +34,8 @@ namespace MednaNetAPIClient.Installs
                 throw new System.Exception(response.StatusCode.ToString() + ": " + response.Content.ToString());
             }
 
+            this.client.DefaultRequestHeaders.Add("Authorization", install.code);
+
             return install;
         }
 
