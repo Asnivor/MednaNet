@@ -195,7 +195,8 @@ namespace MednaNetAPI.Controllers
                              select new MednaNetAPIClient.Models.Users()
                              {
                                  id = q.id,
-                                 username = q.username
+                                 username = q.username,
+                                 isOnline = true
                              }).ToList();
                 }
             }
@@ -1186,7 +1187,8 @@ namespace MednaNetAPI.Controllers
                                  {
                                      discordId = q.user_discord_id,
                                      id = q.id,
-                                     username = q.username
+                                     username = q.username,
+                                     isOnline = q.is_online
                                  }).ToList();
                     }
                 }
