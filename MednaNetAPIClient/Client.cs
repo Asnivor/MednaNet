@@ -68,9 +68,9 @@ namespace MednaNetAPIClient
             url = apiHostname.Replace("http://", "").Replace("https://", "");
             port = apiPort;
 
-            //this.client.BaseAddress = new Uri("https://" + url + ":" + port + "/"); 
+            this.client.BaseAddress = new Uri("https://" + url + ":" + port + "/"); 
 
-            this.client.BaseAddress = new Uri("http://" + url + ":" + port + "/"); //use for local
+            //this.client.BaseAddress = new Uri("http://" + url + ":" + port + "/"); //use for local
             this.client.DefaultRequestHeaders.Accept.Clear();
             this.client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
