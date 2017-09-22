@@ -47,6 +47,7 @@ namespace MednaNet_Bridge
             {
                 getUserCount = 0;
                 GetUsers();
+                RefreshChannels();
             }
             else
             {
@@ -87,6 +88,29 @@ namespace MednaNet_Bridge
                 });
             }
             await apiClient.Users.AddDiscordUsers(userList);
+        }
+
+        private async void RefreshChannels()
+        {
+            textBox1.AppendText("Refreshing Channels..." + System.Environment.NewLine);
+
+            var channels = await this.apiClient.Channels.GetChannels();
+
+            foreach (var channel in channels)
+            {
+                var localLookup = monitoredChannels.Where(a => a.channelId == channel.id).FirstOrDefault();
+
+                if (localLookup == null)
+                {
+                    monitoredChannels.Add(new Data.MonitoredChannel()
+                    {
+                        channelName = channel.channelName,
+                        channelId = channel.id,
+                        discordChannelId = channel.discordId,
+                        lastMessageId = 0
+                    });
+                }                
+            }
         }
 
         private async void GetMessages()
@@ -142,6 +166,10 @@ namespace MednaNet_Bridge
             await startBot();
 
             label1.Text = "BOT RUNNING!!";
+
+            textBox1.AppendText("BOT Started..." + System.Environment.NewLine);
+
+            button2.Enabled = false;
 
             this.apiClient = new MednaNetAPIClient.Client(this.mednaNetAPIUrl, this.mednaNetAPIPort, this.botInstallKey);
 
@@ -232,5 +260,7 @@ namespace MednaNet_Bridge
                 }
             }
         }
+
+        
     }
 }
