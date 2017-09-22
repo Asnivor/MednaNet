@@ -17,7 +17,7 @@ namespace MednaNetAPIClient.Models
         {
             get
             {
-                if(discordId == "0")
+                if(discordId == "0" || discordId == "")
                 {
                     return id.ToString();
                 }

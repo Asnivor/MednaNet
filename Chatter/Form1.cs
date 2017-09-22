@@ -104,7 +104,7 @@ namespace Chatter
 
                     foreach (var message in messages)
                     {
-                        messageBox.AppendText(message.name + " @ " + message.postedOn.ToString() + System.Environment.NewLine);
+                        messageBox.AppendText(message.user.username + " @ " + message.postedOn.ToString() + System.Environment.NewLine);
                         messageBox.AppendText(message.message + System.Environment.NewLine);
                         messageBox.AppendText(System.Environment.NewLine);
 
@@ -125,7 +125,7 @@ namespace Chatter
 
                     foreach (var message in messages)
                     {
-                        messageBox.AppendText(message.name + " @ " + message.postedOn.ToString() + System.Environment.NewLine);
+                        messageBox.AppendText(message.user.username + " @ " + message.postedOn.ToString() + System.Environment.NewLine);
                         messageBox.AppendText(message.message + System.Environment.NewLine);
                         messageBox.AppendText(System.Environment.NewLine);
 
@@ -141,7 +141,7 @@ namespace Chatter
 
                 foreach (var message in messages)
                 {
-                    messageBox.AppendText(message.name + " @ " + message.postedOn.ToString() + System.Environment.NewLine);
+                    messageBox.AppendText(message.user.username + " @ " + message.postedOn.ToString() + System.Environment.NewLine);
                     messageBox.AppendText(message.message + System.Environment.NewLine);
                     messageBox.AppendText(System.Environment.NewLine);
 
@@ -191,7 +191,6 @@ namespace Chatter
                 channel = this.currentChannel,
                 code = installKey.Text,
                 message = message.Text,
-                name = "", //This does nothing, the username is install specific and the API takes it from the database.
                 postedOn = postTime
             });
 

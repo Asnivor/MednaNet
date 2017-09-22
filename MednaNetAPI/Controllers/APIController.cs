@@ -497,7 +497,7 @@ namespace MednaNetAPI.Controllers
                             else
                             {
                                 var newRecord = new Models.message();
-
+                                
                                 newRecord.code = message.code;
                                 newRecord.message1 = message.message;
                                 newRecord.name = install.username;
@@ -525,7 +525,7 @@ namespace MednaNetAPI.Controllers
             return Ok();
         }
 
-        [Route("api/v1/groups/{id}/messages")]
+        /*[Route("api/v1/groups/{id}/messages")]
         [HttpGet]
         public IHttpActionResult GetMessages(int id)
         {
@@ -585,9 +585,9 @@ namespace MednaNetAPI.Controllers
             }
 
             return Ok(messages.ToList());
-        }
+        }*/
 
-        [Route("api/v1/groups/{id}/messages/from/{from}")]
+        /*[Route("api/v1/groups/{id}/messages/from/{from}")]
         [HttpGet]
         public IHttpActionResult GetMessagesFrom(int id, string from)
         {
@@ -659,7 +659,7 @@ namespace MednaNetAPI.Controllers
             }
 
             return Ok(messages);
-        }
+        }*/
 
 
         [Route("api/v1/discord/channels")]
@@ -781,14 +781,25 @@ namespace MednaNetAPI.Controllers
             {
                 using (Models.MedLaunchChatEntities db = new Models.MedLaunchChatEntities())
                 {
+                    //(tempVariable != null) ? (int?)tempVariable.Length : null;
+
                     messages = (from q in db.discord_messages
+                                join du in db.discord_users on q.discord_user_id equals du.user_discord_id
+                                join i in db.installs on q.code equals i.code
                                 where q.channel == id && !q.clients_ignore
                                 select new MednaNetAPIClient.Models.Messages()
                                 {
                                     channel = q.channel,
                                     code = q.code,
                                     message = q.message,
-                                    name = q.name,
+                                    user = new MednaNetAPIClient.Models.Users()
+                                    {
+                                        discordId = du.user_discord_id,
+                                        id = i.id,
+                                        username = (du.username == null) ? i.username : du.username,
+                                        isOnline = ((du.username == null && (System.Data.Entity.DbFunctions.AddMinutes(i.last_checkin, 10) > System.Data.Entity.DbFunctions.AddMinutes(DateTime.Now, -10)) || du.is_online == true)) ? true : false
+                                        
+                                    },
                                     postedOn = q.posted_on,
                                     id = q.id
                                 }).ToList();
@@ -855,7 +866,7 @@ namespace MednaNetAPI.Controllers
 
                                 if (installKey == "botInstallKey")
                                 {
-                                    username = message.name;
+                                    username = message.user.username;
 
                                 }
                                 else
@@ -871,7 +882,7 @@ namespace MednaNetAPI.Controllers
                                 newRecord.posted_on = DateTime.Now;
                                 newRecord.channel = id;
                                 newRecord.clients_ignore = clientIgnore;
-
+                                newRecord.discord_user_id = message.user.discordId;
                                 db.discord_messages.Add(newRecord);
                                 db.SaveChanges();
 
@@ -931,9 +942,38 @@ namespace MednaNetAPI.Controllers
                     if (install != null)
                     {
 
+                         /*message =
+                             (from g in db.discord_channels
+                              from m in g.discord_messages
+                              join du in db.discord_users on m.discord_user_id equals du.user_discord_id
+                              join i in db.installs on m.code equals i.code
+                              where !m.clients_ignore && m.channel == id
+                              orderby m.id descending
+                              select new MednaNetAPIClient.Models.Messages()
+                              {
+                                  channel = g.id,
+                                  code = m.code,
+                                  message = m.message,
+                                  user = new MednaNetAPIClient.Models.Users()
+                                  {
+                                      discordId = du.user_discord_id,
+                                      id = i.id,
+                                      username = (du.username == null) ? i.username : du.username,
+                                      isOnline = ((du.username == null && (System.Data.Entity.DbFunctions.AddMinutes(i.last_checkin, 10) > System.Data.Entity.DbFunctions.AddMinutes(DateTime.Now, -10)) || du.is_online == true)) ? true : false
+
+                                  },
+                                  postedOn = m.posted_on,
+                                  id = m.id
+                              }).FirstOrDefault();*/
+
+
                         message =
                             (from g in db.discord_channels
                              from m in g.discord_messages
+                             join du in db.discord_users on m.discord_user_id equals du.user_discord_id into du2
+                             from discordUsers in du2.DefaultIfEmpty()
+                             join i in db.installs on m.code equals i.code into i2
+                             from medLaunchInstall in i2.DefaultIfEmpty()
                              where !m.clients_ignore && m.channel == id
                              orderby m.id descending
                              select new MednaNetAPIClient.Models.Messages()
@@ -941,7 +981,14 @@ namespace MednaNetAPI.Controllers
                                  channel = g.id,
                                  code = m.code,
                                  message = m.message,
-                                 name = m.name,
+                                 user = new MednaNetAPIClient.Models.Users()
+                                 {
+                                     discordId = discordUsers.user_discord_id,
+                                     id = medLaunchInstall.id,
+                                     username = (discordUsers.username == null) ? medLaunchInstall.username : discordUsers.username,
+                                     isOnline = ((discordUsers.username == null && (System.Data.Entity.DbFunctions.AddMinutes(medLaunchInstall.last_checkin, 10) > System.Data.Entity.DbFunctions.AddMinutes(DateTime.Now, -10)) || discordUsers.is_online == true)) ? true : false
+
+                                 },
                                  postedOn = m.posted_on,
                                  id = m.id
                              }).FirstOrDefault();
@@ -1005,7 +1052,7 @@ namespace MednaNetAPI.Controllers
                     if (install != null)
                     {
 
-                        messages =
+                        /*messages =
                             (from g in db.discord_channels
                              from m in g.discord_messages
                              where m.posted_on >= fromDate && !m.clients_ignore && m.channel == id
@@ -1018,7 +1065,42 @@ namespace MednaNetAPI.Controllers
                                  name = m.name,
                                  postedOn = m.posted_on,
                                  id = m.id
-                             }).ToList();
+                             }).ToList();*/
+
+                        /*var query = from person in people
+                                    join pet in pets on person equals pet.Owner into gj
+                                    from subpet in gj.DefaultIfEmpty()
+                                    select new { person.FirstName, PetName = subpet?.Name ?? String.Empty };*/
+
+
+                        messages =
+                             (from g in db.discord_channels
+                              from m in g.discord_messages
+                              join du in db.discord_users on m.discord_user_id equals du.user_discord_id into du2
+                              from discordUsers in du2.DefaultIfEmpty()
+                              join i in db.installs on m.code equals i.code into i2
+                              from medLaunchInstall in i2.DefaultIfEmpty()
+                              where m.posted_on >= fromDate && !m.clients_ignore && m.channel == id
+                              orderby m.posted_on
+                              select new MednaNetAPIClient.Models.Messages()
+                              {
+                                  channel = g.id,
+                                  code = m.code,
+                                  message = m.message,
+                                  user = new MednaNetAPIClient.Models.Users()
+                                  {
+                                      discordId = discordUsers.user_discord_id,
+                                      id = medLaunchInstall.id,
+                                      username = (discordUsers.username == null) ? medLaunchInstall.username : discordUsers.username,
+                                      isOnline = ((discordUsers.username == null && (System.Data.Entity.DbFunctions.AddMinutes(medLaunchInstall.last_checkin, 10) > System.Data.Entity.DbFunctions.AddMinutes(DateTime.Now, -10)) || discordUsers.is_online == true)) ? true : false
+
+                                  },
+                                  postedOn = m.posted_on,
+                                  id = m.id
+                              }).ToList();
+
+
+
                     }
                 }
             }
@@ -1066,20 +1148,73 @@ namespace MednaNetAPI.Controllers
                     if (install != null)
                     {
 
+                        /* messages =
+                             (from g in db.discord_channels
+                              from m in g.discord_messages
+                              where m.id > messageId && !m.clients_ignore && m.channel == id
+                              orderby m.posted_on
+                              select new MednaNetAPIClient.Models.Messages()
+                              {
+                                  channel = g.id,
+                                  code = m.code,
+                                  message = m.message,
+                                  name = m.name,
+                                  postedOn = m.posted_on,
+                                  id = m.id
+                              }).ToList();*/
+
+
+                        /*  messages =
+                               (from g in db.discord_channels
+                                from m in g.discord_messages
+                                join du in db.discord_users on m.discord_user_id equals du.user_discord_id
+                                join i in db.installs on m.code equals i.code
+                                where m.id > messageId && !m.clients_ignore && m.channel == id
+                                orderby m.posted_on
+                                select new MednaNetAPIClient.Models.Messages()
+                                {
+                                    channel = g.id,
+                                    code = m.code,
+                                    message = m.message,
+                                    user = new MednaNetAPIClient.Models.Users()
+                                    {
+                                        discordId = du.user_discord_id,
+                                        id = i.id,
+                                        username = (du.username == null) ? i.username : du.username,
+                                        isOnline = ((du.username == null && (System.Data.Entity.DbFunctions.AddMinutes(i.last_checkin, 10) > System.Data.Entity.DbFunctions.AddMinutes(DateTime.Now, -10)) || du.is_online == true)) ? true : false
+
+                                    },
+                                    postedOn = m.posted_on,
+                                    id = m.id
+                                }).ToList();*/
+
+
                         messages =
-                            (from g in db.discord_channels
-                             from m in g.discord_messages
-                             where m.id > messageId && !m.clients_ignore && m.channel == id
-                             orderby m.posted_on
-                             select new MednaNetAPIClient.Models.Messages()
-                             {
-                                 channel = g.id,
-                                 code = m.code,
-                                 message = m.message,
-                                 name = m.name,
-                                 postedOn = m.posted_on,
-                                 id = m.id
-                             }).ToList();
+                           (from g in db.discord_channels
+                            from m in g.discord_messages
+                            join du in db.discord_users on m.discord_user_id equals du.user_discord_id into du2
+                            from discordUsers in du2.DefaultIfEmpty()
+                            join i in db.installs on m.code equals i.code into i2
+                            from medLaunchInstall in i2.DefaultIfEmpty()
+                            where m.id > messageId && !m.clients_ignore && m.channel == id
+                            orderby m.posted_on
+                            select new MednaNetAPIClient.Models.Messages()
+                            {
+                                channel = g.id,
+                                code = m.code,
+                                message = m.message,
+                                user = new MednaNetAPIClient.Models.Users()
+                                {
+                                    discordId = discordUsers.user_discord_id,
+                                    id = medLaunchInstall.id,
+                                    username = (discordUsers.username == null) ? medLaunchInstall.username : discordUsers.username,
+                                    isOnline = ((discordUsers.username == null && (System.Data.Entity.DbFunctions.AddMinutes(medLaunchInstall.last_checkin, 10) > System.Data.Entity.DbFunctions.AddMinutes(DateTime.Now, -10)) || discordUsers.is_online == true)) ? true : false
+
+                                },
+                                postedOn = m.posted_on,
+                                id = m.id
+                            }).ToList();
+
                     }
                 }
             }

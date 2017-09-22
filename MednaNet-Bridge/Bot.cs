@@ -148,7 +148,7 @@ namespace MednaNet_Bridge
                             if (message.code != botInstallKey)
                             {
                                 var ch = this.client.GetChannel(Convert.ToUInt64(s.discordChannelId)) as ISocketMessageChannel;
-                                await ch.SendMessageAsync("**" + message.name + "**: " + message.message);
+                                await ch.SendMessageAsync("**" + message.user.username + "**: " + message.message);
 
                                 s.lastMessageId = message.id;
                             }
@@ -222,14 +222,11 @@ namespace MednaNet_Bridge
 
                 if (monitoredChannels.Exists(x => x.channelName == message.Channel.Name))
                 {
-                    //textBox1.AppendText("Channel is a monitored channel." + System.Environment.NewLine);
-
+              
                     var channel = monitoredChannels.Where(x => x.channelName == message.Channel.Name).FirstOrDefault();
 
                     if (channel != null)
                     {
-                        //textBox1.AppendText("Add message to channel." + System.Environment.NewLine);
-
                         string attachmentURLS = "";
                         string messagecontent = message.Content;
 
@@ -253,8 +250,12 @@ namespace MednaNet_Bridge
                             channel = channel.channelId,
                             code = this.botInstallKey,
                             message = messagecontent,
-                            name = message.Author.Username,
-                            postedOn = message.CreatedAt.LocalDateTime
+                            postedOn = message.CreatedAt.LocalDateTime,
+                            user = new MednaNetAPIClient.Models.Users()
+                            {
+                                discordId = message.Author.Id.ToString(),
+                                username = message.Author.Username
+                            }
                         });
                     }
                 }

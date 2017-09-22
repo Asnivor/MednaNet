@@ -21,6 +21,7 @@ namespace MednaNetAPI.Models
         public string message { get; set; }
         public int channel { get; set; }
         public bool clients_ignore { get; set; }
+        public string discord_user_id { get; set; }
     
         public virtual discord_channels discord_channels { get; set; }
     }
