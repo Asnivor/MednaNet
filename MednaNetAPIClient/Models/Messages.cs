@@ -12,7 +12,7 @@ namespace MednaNetAPIClient.Models
         public string code { get; set; }
         public string message { get; set; }
         public DateTime postedOn { get; set; }
-        public string name { get; set; }
+        public Users user { get; set; }
         public int channel { get; set; }
     }
 }
