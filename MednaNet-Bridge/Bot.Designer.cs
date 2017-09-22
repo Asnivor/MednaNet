@@ -37,7 +37,7 @@
             // 
             this.button2.Location = new System.Drawing.Point(12, 12);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(303, 40);
+            this.button2.Size = new System.Drawing.Size(132, 40);
             this.button2.TabIndex = 5;
             this.button2.Text = "Start Bot";
             this.button2.UseVisualStyleBackColor = true;
