@@ -882,7 +882,7 @@ namespace MednaNetAPI.Controllers
                                 newRecord.posted_on = DateTime.Now;
                                 newRecord.channel = id;
                                 newRecord.clients_ignore = clientIgnore;
-                                newRecord.discord_user_id = message.user.discordId;
+                                newRecord.discord_user_id = message.user.discordId ?? "";
                                 db.discord_messages.Add(newRecord);
                                 db.SaveChanges();
 

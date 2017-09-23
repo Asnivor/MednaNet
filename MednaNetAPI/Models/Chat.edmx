@@ -21,7 +21,7 @@
           <Property Name="posted_on" Type="datetime" Nullable="false" />
           <Property Name="code" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="name" Type="varchar" MaxLength="32" Nullable="false" />
-          <Property Name="message" Type="varchar" MaxLength="2000" Nullable="false" />
+          <Property Name="message" Type="nvarchar" MaxLength="2000" Nullable="false" />
           <Property Name="channel" Type="int" Nullable="false" />
           <Property Name="clients_ignore" Type="bit" Nullable="false" />
           <Property Name="discord_user_id" Type="varchar" MaxLength="50" />
@@ -233,7 +233,7 @@
           <Property Name="posted_on" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="code" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="name" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="false" />
-          <Property Name="message" Type="String" Nullable="false" MaxLength="2000" FixedLength="false" Unicode="false" />
+          <Property Name="message" Type="String" Nullable="false" MaxLength="2000" FixedLength="false" Unicode="true" />
           <Property Name="channel" Type="Int32" Nullable="false" />
           <NavigationProperty Name="discord_channels" Relationship="MedLaunchModel.FK_discord_messages_groups" FromRole="discord_messages" ToRole="discord_channels" />
           <Property Name="clients_ignore" Type="Boolean" Nullable="false" />
