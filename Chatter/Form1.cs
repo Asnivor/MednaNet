@@ -191,7 +191,8 @@ namespace Chatter
                 channel = this.currentChannel,
                 code = installKey.Text,
                 message = message.Text,
-                postedOn = postTime
+                postedOn = postTime,
+                user = new MednaNetAPIClient.Models.Users(){}
             });
 
             lastChannelMessageId[this.currentChannel] = newMessage.id;
