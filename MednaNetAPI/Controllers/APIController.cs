@@ -1258,9 +1258,6 @@ namespace MednaNetAPI.Controllers
                         //Delete all users in table
                         db.Database.ExecuteSqlCommand("TRUNCATE TABLE [discord_users]");
 
-                        //Add in any discord users like webhook users etc.
-                        db.Database.ExecuteSqlCommand("insert into discord_users select name as username, discord_user_id as user_discord_id, 0 as is_online from( select distinct name, discord_user_id from[discord_messages]  where discord_user_id not in (select user_discord_id from discord_users) and discord_user_id <> '') as t1");
-
                         foreach (var user in users)
                         {
                             var u = new Models.discord_users();
@@ -1272,6 +1269,9 @@ namespace MednaNetAPI.Controllers
                             db.discord_users.Add(u);
                             db.SaveChanges();
                         }
+
+                        //Add in any discord users like webhook users etc.
+                        db.Database.ExecuteSqlCommand("insert into discord_users select name as username, discord_user_id as user_discord_id, 0 as is_online from( select distinct name, discord_user_id from[discord_messages]  where discord_user_id not in (select user_discord_id from discord_users) and discord_user_id <> '') as t1");
                     }
                 }
             }
