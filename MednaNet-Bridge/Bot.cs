@@ -214,54 +214,91 @@ namespace MednaNet_Bridge
 
         private async Task MessageReceived(SocketMessage message)
         {
-            //textBox1.AppendText("Messages received" + System.Environment.NewLine);
-
-            if (message.Author.Id != Convert.ToUInt64(botDiscordId)) 
+            try
             {
-               // textBox1.AppendText("Message isn't the bot" + System.Environment.NewLine);
-
-                if (monitoredChannels.Exists(x => x.channelName == message.Channel.Name))
+                if (message.Author.Id != Convert.ToUInt64(botDiscordId))
                 {
-              
-                    var channel = monitoredChannels.Where(x => x.channelName == message.Channel.Name).FirstOrDefault();
-
-                    if (channel != null)
+                    if (monitoredChannels.Exists(x => x.channelName == message.Channel.Name))
                     {
-                        string attachmentURLS = "";
-                        string messagecontent = message.Content;
 
-                        if(message.Attachments.Count > 0)
+                        var channel = monitoredChannels.Where(x => x.channelName == message.Channel.Name).FirstOrDefault();
+
+                        if (channel != null)
                         {
-                            foreach(var attachment in message.Attachments)
+                            string attachmentURLS = "";
+                            string messagecontent = message.Content;
+
+                            if (message.Source == MessageSource.Webhook)
                             {
-                                attachmentURLS += attachment.Url + ", ";
+                                foreach (var embed in message.Embeds)
+                                {
+                                    messagecontent = "";
+                                    messagecontent += embed.Title + System.Environment.NewLine;
+                                    messagecontent += embed.Description + System.Environment.NewLine;
+                                    messagecontent += embed.Url + System.Environment.NewLine;
+                                    messagecontent += (embed.Image.HasValue) ? embed.Image.Value.Url : "";
+
+                                    await this.apiClient.Channels.CreateMessage(channel.channelId, new MednaNetAPIClient.Models.Messages()
+                                    {
+                                        channel = channel.channelId,
+                                        code = this.botInstallKey,
+                                        message = messagecontent,
+                                        postedOn = message.CreatedAt.LocalDateTime,
+                                        user = new MednaNetAPIClient.Models.Users()
+                                        {
+                                            discordId = message.Author.Id.ToString(),
+                                            username = message.Author.Username
+                                        }
+                                    });
+                                }
+                            }
+                            else
+                            {
+                                if (message.Attachments.Count > 0)
+                                {
+                                    foreach (var attachment in message.Attachments)
+                                    {
+                                        attachmentURLS += attachment.Url + ", ";
+                                    }
+
+                                    if (attachmentURLS.EndsWith(", "))
+                                    {
+                                        attachmentURLS = attachmentURLS.Substring(0, attachmentURLS.Length - 2);
+                                    }
+
+                                    messagecontent += " " + attachmentURLS;
+                                }
+
+                                await this.apiClient.Channels.CreateMessage(channel.channelId, new MednaNetAPIClient.Models.Messages()
+                                {
+                                    channel = channel.channelId,
+                                    code = this.botInstallKey,
+                                    message = messagecontent,
+                                    postedOn = message.CreatedAt.LocalDateTime,
+                                    user = new MednaNetAPIClient.Models.Users()
+                                    {
+                                        discordId = message.Author.Id.ToString(),
+                                        username = message.Author.Username
+                                    }
+                                });
                             }
 
-                            if(attachmentURLS.EndsWith(", "))
-                            {
-                                attachmentURLS = attachmentURLS.Substring(0, attachmentURLS.Length - 2);
-                            }
 
-                            messagecontent += " " + attachmentURLS;
+
+
                         }
-
-                        await this.apiClient.Channels.CreateMessage(channel.channelId, new MednaNetAPIClient.Models.Messages()
-                        {
-                            channel = channel.channelId,
-                            code = this.botInstallKey,
-                            message = messagecontent,
-                            postedOn = message.CreatedAt.LocalDateTime,
-                            user = new MednaNetAPIClient.Models.Users()
-                            {
-                                discordId = message.Author.Id.ToString(),
-                                username = message.Author.Username
-                            }
-                        });
                     }
                 }
             }
+            catch (Exception ex)
+            {
+                //Do nothing...
+            }
         }
 
+            
+     }
+
         
-    }
 }
+

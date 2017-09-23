@@ -107,7 +107,7 @@ namespace Chatter
                     foreach (var message in messages)
                     {
                         messageBox.AppendText(message.user.username + " @ " + message.postedOn.ToString() + System.Environment.NewLine);
-                        messageBox.AppendText(message.message + System.Environment.NewLine);
+                        messageBox.AppendText(message.message.Replace("\n", System.Environment.NewLine) + System.Environment.NewLine);
                         messageBox.AppendText(System.Environment.NewLine);
 
                         if (lastChannelMessageId.ContainsKey(channelId))
@@ -128,7 +128,7 @@ namespace Chatter
                     foreach (var message in messages)
                     {
                         messageBox.AppendText(message.user.username + " @ " + message.postedOn.ToString() + System.Environment.NewLine);
-                        messageBox.AppendText(message.message + System.Environment.NewLine);
+                        messageBox.AppendText(message.message.Replace("\n", System.Environment.NewLine) + System.Environment.NewLine);
                         messageBox.AppendText(System.Environment.NewLine);
 
                         lastChannelMessageId[channelId] = message.id;
@@ -144,7 +144,7 @@ namespace Chatter
                 foreach (var message in messages)
                 {
                     messageBox.AppendText(message.user.username + " @ " + message.postedOn.ToString() + System.Environment.NewLine);
-                    messageBox.AppendText(message.message + System.Environment.NewLine);
+                    messageBox.AppendText(message.message.Replace("\n", System.Environment.NewLine) + System.Environment.NewLine);
                     messageBox.AppendText(System.Environment.NewLine);
 
                     if (lastChannelMessageId.ContainsKey(channelId))
