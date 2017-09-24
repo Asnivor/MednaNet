@@ -70,7 +70,7 @@ namespace MednaNetAPIClient
 
             this.client.BaseAddress = new Uri("https://" + url + ":" + port + "/");
 
-#if DEBUG
+#if LOCALDEBUG
 
             this.client.BaseAddress = new Uri("http://" + url + ":" + port + "/"); //use for local
 

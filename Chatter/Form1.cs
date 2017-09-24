@@ -53,7 +53,7 @@ namespace Chatter
         {
             this.client = new MednaNetAPIClient.Client("mednanet.medlaunch.info", "443", "562ad8ef-12c4-4596-ac58-f5021749541b");
 
-#if DEBUG
+#if LOCALDEBUG
             this.client = new MednaNetAPIClient.Client("localhost", "24215", "562ad8ef-12c4-4596-ac58-f5021749541b");
 #endif
             currentInstall = await this.client.Install.GetCurrentInstall("562ad8ef-12c4-4596-ac58-f5021749541b");
