@@ -155,7 +155,7 @@ namespace MednaNetAPIClient.Channels
         public async Task<Models.Messages> CreateMessage(int channelId, Models.Messages message)
         {
             HttpResponseMessage response = await client.PostAsJsonAsync("api/v1/discord/channels/" + channelId.ToString() + "/messages", message);
-            response.EnsureSuccessStatusCode();
+            
 
             Models.Messages newMessage = null;
 
