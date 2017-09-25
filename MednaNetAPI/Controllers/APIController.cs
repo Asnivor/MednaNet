@@ -839,7 +839,7 @@ namespace MednaNetAPI.Controllers
             bool clientIgnore = false;
 
             Models.discord_messages newRecord = null;
-
+            MednaNetAPIClient.Models.Messages insertedMessage = null;
             try
             {
                 newRecord = new Models.discord_messages();
@@ -886,6 +886,33 @@ namespace MednaNetAPI.Controllers
                                 db.discord_messages.Add(newRecord);
                                 db.SaveChanges();
 
+
+
+                                //(tempVariable != null) ? (int?)tempVariable.Length : null;
+                                
+                                insertedMessage = (from q in db.discord_messages
+                                                join du in db.discord_users on q.discord_user_id equals du.user_discord_id
+                                                join i in db.installs on q.code equals i.code
+                                                where q.id == newRecord.id
+                                                select new MednaNetAPIClient.Models.Messages()
+                                                {
+                                                    channel = q.channel,
+                                                    code = q.code,
+                                                    message = q.message,
+                                                    user = new MednaNetAPIClient.Models.Users()
+                                                    {
+                                                        discordId = du.user_discord_id,
+                                                        id = i.id,
+                                                        username = (du.username == null) ? i.username : du.username,
+                                                        isOnline = ((du.username == null && (System.Data.Entity.DbFunctions.AddMinutes(i.last_checkin, 10) > System.Data.Entity.DbFunctions.AddMinutes(DateTime.Now, -10)) || du.is_online == true)) ? true : false
+
+                                                    },
+                                                    postedOn = q.posted_on,
+                                                    id = q.id
+                                                }).FirstOrDefault();
+                               
+
+
                             }
                         }
                     }
@@ -903,7 +930,7 @@ namespace MednaNetAPI.Controllers
 
             
 
-            return Ok(newRecord);
+            return Ok(insertedMessage);
         }
 
 
