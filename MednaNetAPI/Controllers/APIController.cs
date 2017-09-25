@@ -890,7 +890,7 @@ namespace MednaNetAPI.Controllers
 
                                 //(tempVariable != null) ? (int?)tempVariable.Length : null;
                                 
-                                insertedMessage = (from q in db.discord_messages
+                               /* insertedMessage = (from q in db.discord_messages
                                                 join du in db.discord_users on q.discord_user_id equals du.user_discord_id
                                                 join i in db.installs on q.code equals i.code
                                                 where q.id == newRecord.id
@@ -909,9 +909,32 @@ namespace MednaNetAPI.Controllers
                                                     },
                                                     postedOn = q.posted_on,
                                                     id = q.id
-                                                }).FirstOrDefault();
-                               
+                                                }).FirstOrDefault();*/
 
+                                insertedMessage =
+                                (from g in db.discord_channels
+                                 from m in g.discord_messages
+                                 join du in db.discord_users on m.discord_user_id equals du.user_discord_id into du2
+                                 from discordUsers in du2.DefaultIfEmpty()
+                                 join i in db.installs on m.code equals i.code into i2
+                                 from medLaunchInstall in i2.DefaultIfEmpty()
+                                 where m.id == newRecord.id
+                                 select new MednaNetAPIClient.Models.Messages()
+                                 {
+                                     channel = g.id,
+                                     code = m.code,
+                                     message = m.message,
+                                     user = new MednaNetAPIClient.Models.Users()
+                                     {
+                                         discordId = discordUsers.user_discord_id,
+                                         id = medLaunchInstall.id,
+                                         username = (discordUsers.username == null) ? medLaunchInstall.username : discordUsers.username,
+                                         isOnline = ((discordUsers.username == null && (System.Data.Entity.DbFunctions.AddMinutes(medLaunchInstall.last_checkin, 10) > System.Data.Entity.DbFunctions.AddMinutes(DateTime.Now, -10)) || discordUsers.is_online == true)) ? true : false
+
+                                     },
+                                     postedOn = m.posted_on,
+                                     id = m.id
+                                 }).FirstOrDefault();
 
                             }
                         }
