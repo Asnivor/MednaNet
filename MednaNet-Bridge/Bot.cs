@@ -233,9 +233,10 @@ namespace MednaNet_Bridge
                                 foreach (var embed in message.Embeds)
                                 {
                                     messagecontent = "";
-                                    messagecontent += embed.Title + System.Environment.NewLine;
-                                    messagecontent += embed.Description + System.Environment.NewLine;
-                                    messagecontent += embed.Url + System.Environment.NewLine;
+                                    messagecontent += (embed.Author.HasValue) ? embed.Author + System.Environment.NewLine : "";
+                                    messagecontent += (embed.Title.Length > 0) ? embed.Title + System.Environment.NewLine : "";
+                                    messagecontent += (embed.Description.Length > 0) ? embed.Description + System.Environment.NewLine : "";
+                                    messagecontent += (embed.Url.Length > 0) ? embed.Url + System.Environment.NewLine : "";
                                     messagecontent += (embed.Image.HasValue) ? embed.Image.Value.Url : "";
 
                                     await this.apiClient.Channels.CreateMessage(channel.channelId, new MednaNetAPIClient.Models.Messages()
