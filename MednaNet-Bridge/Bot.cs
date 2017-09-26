@@ -82,7 +82,7 @@ namespace MednaNet_Bridge
                 userList.Add(new MednaNetAPIClient.Models.Users()
                 {
                     discordId = user.Id.ToString(),
-                    username = user.Username,
+                    username = (user.Nickname == null) ? user.Nickname : user.Username,
                     isOnline = temp
 
                 });
